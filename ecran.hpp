@@ -4,7 +4,10 @@
 class Ecran{
 private:
 	float resolution;
-	Point position;
+	Point topLeft;
+	Point topright;
+	Point bottomLeft;
+
 
 public:
 	Ecran();
