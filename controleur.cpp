@@ -9,6 +9,11 @@ Controleur::Controller(const Scene s)
 	scene = s;
 }
 
+int main(int argc, char const *argv[])
+{
+	
+	return 0;
+}
 
 void Controleur::parse(const char* path)
 {
@@ -37,19 +42,30 @@ void Controleur::parse(const char* path)
 	//creation screen pos top left
 
 	Ecran  ecran;
+
 	stream.getLine(buffer, 5, ' ');
 	ecran.getTopLeft().setX(atoi(buffer));
 	stream.getLine(buffer, 5, ' ');
-	ecran.getPosition.setY(atoi(buffer));
+	ecran.getTopLeft().setY(atoi(buffer));
 	sstream.getLine(buffer, 5, '\n');
-	ecran.getPosition.setZ(atoi(buffer));
+	ecran.getTopLeft().setZ(atoi(buffer));
+	
+
+	stream.getLine(buffer, 5, ' ');
+	ecran.getTopLeft().setX(atoi(buffer));
+	stream.getLine(buffer, 5, ' ');
+	ecran.getTopright().setY(atoi(buffer));
+	sstream.getLine(buffer, 5, '\n');
+	ecran.getTopright().setZ(atoi(buffer));
 	scene.ecran = ecran;
 
-
-
-
-
-
+	stream.getLine(buffer, 5, ' ');
+	ecran.getBottomLeft().setX(atoi(buffer));
+	stream.getLine(buffer, 5, ' ');
+	ecran.getBottomLeft().setY(atoi(buffer));
+	sstream.getLine(buffer, 5, '\n');
+	ecran.getBottomLeft().setZ(atoi(buffer));
+	scene.ecran = ecran;
 
 
 }
