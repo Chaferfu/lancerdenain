@@ -7,10 +7,10 @@ private:
 
 public:
 	Point();
-	Point(float x, float y, float z);
-	float getX() {return x;}
-	float getY() {return y;}
-	float getZ() {return z;}
+	Point(const float x, const float y, const float z);
+	float getX() const {return x;}
+	float getY() const {return y;}
+	float getZ() const {return z;}
 };
 
 #endif;
