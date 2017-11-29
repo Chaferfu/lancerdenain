@@ -13,6 +13,7 @@ Controleur::Controller(const Scene s)
 void Controleur::parse(const char* path)
 {
 
+
 	ifstream stream("In.txt", ifstream::in);
 
 	passerCommentaires(stream);
