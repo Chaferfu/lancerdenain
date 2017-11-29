@@ -5,12 +5,15 @@ class Sphere{
 private:
 	float rayon, reflexivite;
 	Point centre;
+	Couleur couleur;
 
 public:
 	Sphere();
-	float getRayon() {return rayon;}
-	float getReflex() {return reflexivite;}
-	Point getCentre() {return centre;}
+	Sphere(const float r, const Point c, const Couleur coul, const float reflex);
+	float getRayon() const {return rayon;}
+	float getReflex() const {return reflexivite;}
+	Point getCentre() const {return centre;}
+	Couleur getCouleur() const {return couleur;}
 };
 
 #endif
