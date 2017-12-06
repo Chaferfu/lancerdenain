@@ -8,7 +8,7 @@
 #include <iostream>
 #include <fstream>
 #include "controleur.hpp"
-#include <fstream> 		 
+#include <fstream> 			 
 #include <string>
 #include <sstream>
 using namespace std;
@@ -49,9 +49,6 @@ void Controleur::parse()
 	passerCommentaires(stream);
 
 	//creation screen pos top left
-
-	Ecran ecran;
-
 
 	stream.getline(line, 5, ' ');
 	ecran.getTopLeft().setX(atoi(line));
@@ -131,7 +128,12 @@ void Controleur::parse()
 
 		if(!strcmp(type, "sphere"))
 		{
-			
+			Sphere s(centerX, centerY, centerZ, r, colorR, colorG, colorB, reflx);
+			scene.spheres.push_back(s);
+		}
+		else
+		{
+			cout << "c'est pas une shere mon gars" << endl;
 		}
 
 	}
