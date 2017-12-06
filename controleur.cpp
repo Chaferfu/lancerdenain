@@ -29,19 +29,19 @@ void Controleur::parse()
 {
 
 	ifstream stream("In.txt", ifstream::in);
-	string line;
+	char* line;
 
 	passerCommentaires(stream);
 
 
 	//creation camera
 
-	
 	stream.getline(line, 5, ' ');
+	//getline(stream, line, ' ');
 	scene.getCam().setX(atoi(line));
 	stream.getline(line, 5, ' ');
 	scene.getCam().setY(atoi(line));
-	sstream.getline(line, 5, '\n');
+	stream.getline(line, 5, '\n');
 	scene.getCam().setZ(atoi(line));
 	
 
@@ -51,38 +51,37 @@ void Controleur::parse()
 	//creation screen pos top left
 
 	stream.getline(line, 5, ' ');
-	ecran.getTopLeft().setX(atoi(line));
+	scene.getEcran().getTopLeft().setX(atoi(line));
 	stream.getline(line, 5, ' ');
-	ecran.getTopLeft().setY(atoi(line));
-	sstream.getline(line, 5, '\n');
-	ecran.getTopLeft().setZ(atoi(line));
+	scene.getEcran().getTopLeft().setY(atoi(line));
+	stream.getline(line, 5, '\n');
+	scene.getEcran().getTopLeft().setZ(atoi(line));
 
 	passerBlancs(stream);
 	passerCommentaires(stream);
 
 	stream.getline(line, 5, ' ');
-	ecran.getTopRight().setX(atoi(line));
+	scene.getEcran().getTopRight().setX(atoi(line));
 	stream.getline(line, 5, ' ');
-	ecran.getTopRight().setY(atoi(line));
+	scene.getEcran().getTopRight().setY(atoi(line));
 	stream.getline(line, 5, '\n');
-	ecran.getTopRight().setZ(atoi(line));
+	scene.getEcran().getTopRight().setZ(atoi(line));
 
 	passerBlancs(stream);
 	passerCommentaires(stream);
 
 	stream.getline(line, 5, ' ');
-	ecran.getBottomLeft().setX(atoi(line));
+	scene.getEcran().getBottomLeft().setX(atoi(line));
 	stream.getline(line, 5, ' ');
-	ecran.getBottomLeft().setY(atoi(line));
+	scene.getEcran().getBottomLeft().setY(atoi(line));
 	stream.getline(line, 5, '\n');
-	ecran.getBottomLeft().setZ(atoi(line));
+	scene.getEcran().getBottomLeft().setZ(atoi(line));
 
 	passerBlancs(stream);
 	passerCommentaires(stream);
 
 	stream.getline(line, 5, '\n');
-	ecran.setResolution(atoi(line));
-	scene.setEcran(ecran);
+	scene.getEcran().setResolution(atoi(line));
 
 	passerBlancs(stream);
 	passerCommentaires(stream);
@@ -139,13 +138,13 @@ void Controleur::parse()
 	}
 }
 
-void Controleur::passerCommentaires(ifstream stream)
+void Controleur::passerCommentaires(ifstream const &stream)
 {
 	while(stream.peek() == '#') stream.ignore(256,'\n');
 
 }
 
-void Controleur::passerBlancs(ifstream stream)
+void Controleur::passerBlancs(ifstream const &stream)
 {
 	while(stream.peek() == '\n' || stream.peek() == ' ') stream.ignore(1);
 }

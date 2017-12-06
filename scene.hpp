@@ -19,6 +19,7 @@ public:
 	Scene();
 	Scene(const Point c, const Ecran e, const Source s);
 	Point getCam() const {return camera;}
+	Ecran getEcran() const {return ecran;}
 	void setCam(const Point cam) {camera = cam;}
 	void setEcran(const Ecran ecran) {this->ecran = ecran;}
 	void addSphere(const Sphere s);
