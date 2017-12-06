@@ -5,8 +5,8 @@
 #include "ecran.hpp"
 #include "source.hpp"
 #include "scene.hpp"
-#include <fstream>
 #include <iostream>
+#include <fstream>
 #include "controleur.hpp"
 //#include <stdlib>		 //std::ifstream
 using namespace std;
@@ -27,6 +27,8 @@ void Controleur::parse()
 {
 
 	ifstream stream("In.txt", ifstream::in);
+
+	if(stream){
 
 	passerCommentaires(stream);
 	char *buffer;
@@ -73,7 +75,7 @@ void Controleur::parse()
 	stream.getline(buffer, 5, '\n');
 	ecran.getBottomLeft().setZ(atoi(buffer));
 	scene.setEcran(ecran);
-
+}
 
 }
 
