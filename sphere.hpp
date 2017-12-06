@@ -12,6 +12,7 @@ private:
 public:
 	Sphere();
 	Sphere(const float r, const Point c, const Couleur coul, const float reflex);
+	Sphere(const float centerX, const float centerY,const float centerZ,const float r,const int colorR,const int colorG,const int colorB,const float reflx);
 	float getRayon() const {return rayon;}
 	float getReflex() const {return reflexivite;}
 	Point getCentre() const {return centre;}
