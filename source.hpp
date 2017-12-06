@@ -1,18 +1,13 @@
 #ifndef SOURCE_H_INCLUDED
-#ifndef SOURCE_H_INCLUDED
+#define SOURCE_H_INCLUDED
 
-class Source
-{
+class Source{
 private:
 	Point pos;
 	Couleur couleur;
 
 public:
-	Source(Point p, Couleur c)
-	{
-		point = p;
-		couleur = c;
-	};
+	Source(Point p, Couleur c);
 	
 };
 

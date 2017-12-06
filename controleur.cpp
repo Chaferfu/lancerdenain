@@ -1,17 +1,27 @@
+#include "couleur.hpp"
+#include "point.hpp"
+#include "rayon.hpp"
+#include "sphere.hpp"
+#include "ecran.hpp"
+#include "source.hpp"
+#include "scene.hpp"
+#include <fstream>
+#include <iostream>
 #include "controleur.hpp"
 #include <fstream> 	
 #include <stdlib>		 //std::ifstream
 #include <string>
 #include <sstream>
+
 using namespace std;
 
 
-Controleur::Controller(const Scene s)
+Controleur::Controleur(const Scene s)
 {
 	scene = s;
 }
 
-int main(int argc, char const *argv[])
+int main()
 {
 	
 	return 0;
@@ -19,7 +29,6 @@ int main(int argc, char const *argv[])
 
 void Controleur::parse()
 {
-
 
 	ifstream stream("In.txt", ifstream::in);
 	string line;
@@ -31,11 +40,11 @@ void Controleur::parse()
 
 	
 	stream.getline(line, 5, ' ');
-	scene.getCamera().setX(atoi(line));
+	scene.getCam().setX(atoi(line));
 	stream.getline(line, 5, ' ');
-	scene.getCamera().setY(atoi(line));
+	scene.getCam().setY(atoi(line));
 	sstream.getline(line, 5, '\n');
-	scene.getCamera().setZ(atoi(line));
+	scene.getCam().setZ(atoi(line));
 	
 
 	passerBlancs(stream);
@@ -44,6 +53,7 @@ void Controleur::parse()
 	//creation screen pos top left
 
 	Ecran ecran;
+
 
 	stream.getline(line, 5, ' ');
 	ecran.getTopLeft().setX(atoi(line));
@@ -56,11 +66,11 @@ void Controleur::parse()
 	passerCommentaires(stream);
 
 	stream.getline(line, 5, ' ');
-	ecran.getTopright().setX(atoi(line));
+	ecran.getTopRight().setX(atoi(line));
 	stream.getline(line, 5, ' ');
-	ecran.getTopright().setY(atoi(line));
-	sstream.getline(line, 5, '\n');
-	ecran.getTopright().setZ(atoi(line));
+	ecran.getTopRight().setY(atoi(line));
+	stream.getline(line, 5, '\n');
+	ecran.getTopRight().setZ(atoi(line));
 
 	passerBlancs(stream);
 	passerCommentaires(stream);
@@ -69,13 +79,13 @@ void Controleur::parse()
 	ecran.getBottomLeft().setX(atoi(line));
 	stream.getline(line, 5, ' ');
 	ecran.getBottomLeft().setY(atoi(line));
-	sstream.getline(line, 5, '\n');
+	stream.getline(line, 5, '\n');
 	ecran.getBottomLeft().setZ(atoi(line));
 
 	passerBlancs(stream);
 	passerCommentaires(stream);
 
-	stream.getline(line, 5, ' ');
+	stream.getline(line, 5, '\n');
 	ecran.setResolution(atoi(line));
 	scene.setEcran(ecran);
 
@@ -86,7 +96,7 @@ void Controleur::parse()
 	scene.getBackground.setR(atoi(line));
 	stream.getline(line, 5, ' ');
 	scene.getBackground.setG(atoi(line));
-	stream.getline(line, 5, ' ');
+	stream.getline(line, 5, '\n');
 	scene.getBackground.setB(atoi(line));
 
 	passerBlancs(stream);
@@ -102,7 +112,7 @@ void Controleur::parse()
 	scene.getSource().getCouleur().setR(atoi(line));
 	stream.getline(line, 5, ' ');
 	scene.getSource().getCouleur().setG(atoi(line));
-	stream.getline(line, 5, ' ');
+	stream.getline(line, 5, '\n');
 	scene.getSource().getCouleur().setB(atoi(line));
 
 	passerBlancs(stream);
@@ -123,7 +133,7 @@ void Controleur::parse()
 
 		if(!strcmp(type, "sphere"))
 		{
-
+			
 		}
 
 	}

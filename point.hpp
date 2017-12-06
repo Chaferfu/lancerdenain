@@ -11,6 +11,9 @@ public:
 	float getX() const {return x;}
 	float getY() const {return y;}
 	float getZ() const {return z;}
+	void setX(const float x) {this->x = x;}
+	void setY(const float y) {this->y = y;}
+	void setZ(const float z) {this->z = z;}
 };
 
-#endif;
+#endif

@@ -1,5 +1,7 @@
 #ifndef SPHERE_H_INCLUDED
 #define SPHERE_H_INCLUDED
+#include "point.hpp"
+#include "couleur.hpp"
 
 class Sphere{
 private:
