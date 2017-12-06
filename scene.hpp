@@ -11,8 +11,11 @@ private:
 	Point camera;
 	Ecran ecran;
 	Source source;
+	Couleur background;
 
 public:
+
+	void getBackground() const {return background;};
 	Scene();
 	Scene(const Point c, const Ecran e, const Source s);
 	Point getCam() const {return camera;}
