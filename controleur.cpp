@@ -8,11 +8,9 @@
 #include <iostream>
 #include <fstream>
 #include "controleur.hpp"
-#include <fstream> 	
-#include <stdlib>		 //std::ifstream
+#include <fstream> 		 
 #include <string>
 #include <sstream>
-
 using namespace std;
 
 
@@ -141,7 +139,7 @@ void Controleur::parse()
 
 void Controleur::passerCommentaires(ifstream stream)
 {
-	while(stream.peek() == '#') stream.ignore(numeric_limits<streamsize>::max(),'\n');
+	while(stream.peek() == '#') stream.ignore(256,'\n');
 
 }
 

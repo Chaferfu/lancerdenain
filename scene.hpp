@@ -15,7 +15,7 @@ private:
 
 public:
 
-	void getBackground() const {return background;};
+	Couleur getBackground() const {return background;};
 	Scene();
 	Scene(const Point c, const Ecran e, const Source s);
 	Point getCam() const {return camera;}
