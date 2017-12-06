@@ -9,9 +9,11 @@ private:
 	Point camera;
 	Ecran ecran;
 	Source source;
+	Couleur background;
 
 public:
 	Scene(const Point c,const Ecran e, const Source s);
-	addSphere(const Sphere s);
+	void addSphere(const Sphere s);
+	void getBackground() const {return background;};
 
 #endif 
