@@ -3,17 +3,16 @@
 
 class Ecran{
 private:
-	float resolution;
+	int resolution;
 	Point topLeft;
-	Point topright;
+	Point topRight;
 	Point bottomLeft;
 
 
 public:
 	Ecran();
 	Ecran(const float reso, const Point pos);
-	float getReso() const {return resolution;}
-	Point getPos() const {return position;}
+	int getReso() const {return resolution;}
 	Point getTopLeft() const {return topLeft;}
 	Point getTopRight() const {return topRight;}
 	Point getBottomLeft() const {return bottomLeft;}

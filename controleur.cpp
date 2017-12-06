@@ -1,23 +1,30 @@
+#include "couleur.hpp"
+#include "point.hpp"
+#include "rayon.hpp"
+#include "sphere.hpp"
+#include "ecran.hpp"
+#include "source.hpp"
+#include "scene.hpp"
+#include <fstream>
+#include <iostream>
 #include "controleur.hpp"
-#include <fstream> 	
-#include <stdlib>		 //std::ifstream
+//#include <stdlib>		 //std::ifstream
 using namespace std;
 
 
-Controleur::Controller(const Scene s)
+Controleur::Controleur(const Scene s)
 {
 	scene = s;
 }
 
-int main(int argc, char const *argv[])
+int main()
 {
 	
 	return 0;
 }
 
-void Controleur::parse(const char* path)
+void Controleur::parse()
 {
-
 
 	ifstream stream("In.txt", ifstream::in);
 
@@ -28,44 +35,44 @@ void Controleur::parse(const char* path)
 	//creation camera
 
 	Point camera;
-	stream.getLine(buffer, 5, ' ');
-	camera.getPosition().setX(atoi(buffer));
-	stream.getLine(buffer, 5, ' ');
-	camera.getPosition().setY(atoi(buffer));
-	sstream.getLine(buffer, 5, '\n');
-	camera.getPosition().setZ(atoi(buffer));
-	scene.camera = camera;
+	stream.getline(buffer, 5, ' ');
+	scene.getCam().setX(atoi(buffer));
+	stream.getline(buffer, 5, ' ');
+	scene.getCam().setY(atoi(buffer));
+	stream.getline(buffer, 5, '\n');
+	scene.getCam().setZ(atoi(buffer));
+	scene.setCam(camera);
 
 	passerBlancs(stream);
 	passerCommentaires(stream);
 
 	//creation screen pos top left
 
-	Ecran  ecran;
+	Ecran ecran;
 
-	stream.getLine(buffer, 5, ' ');
+	stream.getline(buffer, 5, ' ');
 	ecran.getTopLeft().setX(atoi(buffer));
-	stream.getLine(buffer, 5, ' ');
+	stream.getline(buffer, 5, ' ');
 	ecran.getTopLeft().setY(atoi(buffer));
-	sstream.getLine(buffer, 5, '\n');
+	stream.getline(buffer, 5, '\n');
 	ecran.getTopLeft().setZ(atoi(buffer));
 	
 
-	stream.getLine(buffer, 5, ' ');
+	stream.getline(buffer, 5, ' ');
 	ecran.getTopLeft().setX(atoi(buffer));
-	stream.getLine(buffer, 5, ' ');
-	ecran.getTopright().setY(atoi(buffer));
-	sstream.getLine(buffer, 5, '\n');
-	ecran.getTopright().setZ(atoi(buffer));
-	scene.ecran = ecran;
+	stream.getline(buffer, 5, ' ');
+	ecran.getTopRight().setY(atoi(buffer));
+	stream.getline(buffer, 5, '\n');
+	ecran.getTopRight().setZ(atoi(buffer));
+	scene.setEcran(ecran);
 
-	stream.getLine(buffer, 5, ' ');
+	stream.getline(buffer, 5, ' ');
 	ecran.getBottomLeft().setX(atoi(buffer));
-	stream.getLine(buffer, 5, ' ');
+	stream.getline(buffer, 5, ' ');
 	ecran.getBottomLeft().setY(atoi(buffer));
-	sstream.getLine(buffer, 5, '\n');
+	stream.getline(buffer, 5, '\n');
 	ecran.getBottomLeft().setZ(atoi(buffer));
-	scene.ecran = ecran;
+	scene.setEcran(ecran);
 
 
 }

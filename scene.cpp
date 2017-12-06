@@ -1,4 +1,12 @@
 #include <vector>
+#include "point.hpp"
+#include "couleur.hpp"
+#include "source.hpp"
+#include "scene.hpp"
+
+Scene::Scene(){
+	
+}
 
 Scene::Scene(Point c, Ecran e, Source s)
 {
@@ -7,7 +15,7 @@ Scene::Scene(Point c, Ecran e, Source s)
 	source = s;
 }
 
-Scene::addSphere(const Sphere s)
+void Scene::addSphere(const Sphere s)
 {
 	spheres.push_back(s);
 }

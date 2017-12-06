@@ -9,8 +9,9 @@ private:
 public:
 	Controleur(const Scene s);
 	Scene getScene() const {return scene;}
-	void parse(const char* path);
-	
+	void parse();
+	void passerCommentaires(std::ifstream stream);
+	void passerBlancs(std::ifstream stream);
 };
 
 #endif
