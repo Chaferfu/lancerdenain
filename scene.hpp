@@ -20,6 +20,8 @@ public:
 	Scene(const Point c, const Ecran e, const Source s);
 	Point getCam() const {return camera;}
 	Ecran getEcran() const {return ecran;}
+	Source getSource() const {return source;}
+	std::vector<Sphere> getSpheres() const {return spheres;}
 	void setCam(const Point cam) {camera = cam;}
 	void setEcran(const Ecran ecran) {this->ecran = ecran;}
 	void addSphere(const Sphere s);

@@ -7,8 +7,10 @@ private:
 	Couleur couleur;
 
 public:
+	Source();
 	Source(Point p, Couleur c);
-	
+	Point getPos() const {return pos;}
+	Couleur getCouleur() const {return couleur;}
 };
 
 #endif
