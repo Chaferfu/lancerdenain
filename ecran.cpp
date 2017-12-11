@@ -1,10 +1,16 @@
 #include <iostream>
-#include "ecran.hpp"
+#include <ostream>
 #include "point.hpp"
+#include "ecran.hpp"
+#include "controleur.hpp"
 
-void Duree::afficher(ostream &flux) const
+
+
+
+void Ecran::afficher(std::ostream &flux) const
 {
-    flux << "Ecran:" << endl << "posTL :"<< topLeft << "  posTR :" << topRight << "posBL" << bottomLeft << "resoultion : " << resolution << endl << endl;
+    flux << "Ecran: \n" << "posTL :"<< topLeft << "  posTR :" << 
+    topRight << "posBL" << bottomLeft << "resolution : " << resolution << "\n\n" << std::endl;
 }
 
 

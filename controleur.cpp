@@ -19,12 +19,12 @@ Controleur::Controleur(const Scene s)
 	scene = s;
 }
 
-
-int main()
+Controleur::Controleur()
 {
-	
-	return 0;
+
 }
+
+
 
 void Controleur::parse()
 {
@@ -166,7 +166,7 @@ void Controleur::parse()
 	}*/
 }
 
-ostream& operator<<( ostream &flux, Ecran const& e )
+ostream& operator<<( ostream &flux,const Ecran & e )
 {
 	e.afficher(flux);
     return flux;
@@ -180,11 +180,10 @@ ostream& operator<<( ostream &flux, Point const& p )
 
 
 
-void testParsing()
+void Controleur::testParsing()
 {
-	Controleur c;
-	c.parse();
-	cout << c.getScene().getEcran() << endl;
+	parse();
+	cout << getScene().getEcran() << endl;
 
 }
 
@@ -197,4 +196,11 @@ void Controleur::passerCommentaires(ifstream &stream)
 void Controleur::passerBlancs(ifstream &stream)
 {
 	while(stream.peek() == '\n' || stream.peek() == ' ') stream.ignore(1);
+}
+
+int main()
+{
+	Controleur c;
+	c.testParsing();
+	return 0;
 }
