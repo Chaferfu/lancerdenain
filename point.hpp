@@ -1,5 +1,6 @@
 #ifndef POINT_H_INCLUDED
 #define POINT_H_INCLUDED
+#include <iostream>
 
 class Point{
 private:
@@ -14,6 +15,9 @@ public:
 	void setX(const float x) {this->x = x;}
 	void setY(const float y) {this->y = y;}
 	void setZ(const float z) {this->z = z;}
+	void afficher(std::ostream &flux) const;	
+
+
 };
 
 #endif

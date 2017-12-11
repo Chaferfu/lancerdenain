@@ -1,3 +1,8 @@
+#include <fstream>
+#include <iostream>
+#include <string.h>
+#include <fstream> 			 
+#include <sstream>
 #include "couleur.hpp"
 #include "point.hpp"
 #include "rayon.hpp"
@@ -5,12 +10,7 @@
 #include "ecran.hpp"
 #include "source.hpp"
 #include "scene.hpp"
-#include <iostream>
-#include <fstream>
 #include "controleur.hpp"
-#include <fstream> 			 
-#include <string.h>
-#include <sstream>
 using namespace std;
 
 
@@ -19,11 +19,12 @@ Controleur::Controleur(const Scene s)
 	scene = s;
 }
 
-int main()
+Controleur::Controleur()
 {
-	
-	return 0;
+
 }
+
+
 
 void Controleur::parse()
 {
@@ -118,7 +119,8 @@ void Controleur::parse()
 		istringstream iss(line2);
 
 		string type;
-		int centerX, centerY, centerZ, r, colorR, colorG, colorB, reflx;
+		int centerX, centerY, centerZ, r, colorR, colorG, colorB;
+		float reflx;
 
 		if(!(iss >> type >> centerX >> centerY >> centerZ >> r >> colorR >> colorG >> colorB >> reflx))
 		{
@@ -126,7 +128,7 @@ void Controleur::parse()
 			break;
 		}
 
-		if(!strcmp(type.c_str(), "sphere"))
+		if(!strcmp(type.c_str(), "sphere:"))
 		{
 			Sphere s(centerX, centerY, centerZ, r, colorR, colorG, colorB, reflx);
 			scene.getSpheres().push_back(s);
@@ -164,6 +166,27 @@ void Controleur::parse()
 	}*/
 }
 
+ostream& operator<<( ostream &flux,const Ecran & e )
+{
+	e.afficher(flux);
+    return flux;
+}
+
+ostream& operator<<( ostream &flux, Point const& p )
+{
+	p.afficher(flux);
+    return flux;
+}
+
+
+
+void Controleur::testParsing()
+{
+	parse();
+	cout << getScene().getEcran() << endl;
+
+}
+
 void Controleur::passerCommentaires(ifstream &stream)
 {
 	while(stream.peek() == '#') stream.ignore(256,'\n');
@@ -173,4 +196,11 @@ void Controleur::passerCommentaires(ifstream &stream)
 void Controleur::passerBlancs(ifstream &stream)
 {
 	while(stream.peek() == '\n' || stream.peek() == ' ') stream.ignore(1);
+}
+
+int main()
+{
+	Controleur c;
+	c.testParsing();
+	return 0;
 }
