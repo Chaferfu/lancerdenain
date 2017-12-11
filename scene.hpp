@@ -14,7 +14,6 @@ private:
 	Couleur background;
 
 public:
-
 	Couleur getBackground() const {return background;};
 	Scene();
 	Scene(const Point c, const Ecran e, const Source s);

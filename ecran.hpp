@@ -7,7 +7,7 @@ private:
 	Point topLeft;
 	Point topRight;
 	Point bottomLeft;
-
+	Point points[];
 
 public:
 	Ecran();
