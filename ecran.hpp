@@ -11,7 +11,7 @@ private:
 
 public:
 	Ecran();
-	Ecran(const float reso, const Point pos);
+	Ecran(const int res, const Point tl, const Point tr, const Point bl);
 	int getReso() const {return resolution;}
 	Point getTopLeft() const {return topLeft;}
 	Point getTopRight() const {return topRight;}

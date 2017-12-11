@@ -14,8 +14,13 @@ void Ecran::afficher(std::ostream &flux) const
 }
 
 
-
 Ecran::Ecran(){
 	
 }
 
+Ecran::Ecran(const int res, const Point tl, const Point tr, const Point bl){
+	resolution = res;
+	topLeft = tl;
+	topRight = tr;
+	bottomLeft = bl;
+}
