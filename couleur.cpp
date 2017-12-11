@@ -1,4 +1,10 @@
-#include "Couleur.hpp"
+#include "couleur.hpp"
+#include <math.h>
+using namespace std;
+
+Couleur::Couleur(){
+	
+}
 
 void Couleur::calculerCouleur(const int e, const float angle, const Couleur ci, const Couleur cs){
 	r = e*cos(angle)*ci.getR()*cs.getR()/255;
