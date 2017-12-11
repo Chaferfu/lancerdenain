@@ -30,7 +30,7 @@ void Controleur::parse()
 {
 
 	ifstream stream("In.txt", ifstream::in);
-	char* line = NULL;
+	char line[1000] = "salut";
 
 	passerCommentaires(stream);
 
@@ -51,7 +51,7 @@ void Controleur::parse()
 	//creation screen pos top left
 
 	stream.getline(line, 5, ' ');
-	scene.getEcran().getTopLeft().setX(atoi(line));
+	scene.getEcran().getTopLeft().setX(atof(line));
 	stream.getline(line, 5, ' ');
 	scene.getEcran().getTopLeft().setY(atoi(line));
 	stream.getline(line, 5, '\n');
@@ -183,7 +183,7 @@ ostream& operator<<( ostream &flux, Point const& p )
 void Controleur::testParsing()
 {
 	parse();
-	cout << getScene().getEcran() << endl;
+	cout << getScene().getCam() << endl;
 
 }
 
