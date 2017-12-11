@@ -6,6 +6,13 @@ Couleur::Couleur(){
 	
 }
 
+Couleur::Couleur(const int r, const int g, const int b){
+	this->r = r;
+	this->g = g;
+	this->b = b;
+
+}
+
 void Couleur::calculerCouleur(const int e, const float angle, const Couleur ci, const Couleur cs){
 	r = e*cos(angle)*ci.getR()*cs.getR()/255;
 	g = e*cos(angle)*ci.getG()*cs.getG()/255;

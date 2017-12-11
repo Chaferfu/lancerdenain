@@ -107,7 +107,7 @@ Scene parse()
 		cout << "hmmm ça bug" << endl;
 	}
 
-	Ecran e(pointTL,pointTR,pointBT,res);
+	Ecran e(res, pointTL,pointTR,pointBT);
 
 	passerBlancs(stream);
 	passerCommentaires(stream);
@@ -131,20 +131,20 @@ Scene parse()
 		cout << "hmmm ça bug" << endl;
 	}
 
-	Source(Point(x,y,z), Couleur(r,g,b));
+	Source s = Source(Point(x,y,z), Couleur(r,g,b));
 
 	passerBlancs(stream);
 	passerCommentaires(stream);
 
 	vector<Sphere> v;
+	string type;
 
 	while(getline(stream, str))
 	{
 		istringstream iss(str);
 
-		string type;
 
-		if(!(iss >> type >> centerX >> centerY >> centerZ >> r >> colorR >> colorG >> colorB >> reflx))
+		if(!(iss >> type >> x >> y >> z >> radius >> r >> g >> b >> reflx))
 		{
 			cout << "hmmm ça bug" << endl;
 			break;
@@ -152,7 +152,7 @@ Scene parse()
 
 		if(!strcmp(type.c_str(), "sphere:"))
 		{
-			Sphere s(centerX, centerY, centerZ, r, colorR, colorG, colorB, reflx);
+			Sphere s(x, y, z, radius, r, g, b, reflx);
 			v.push_back(s);
 		}
 		else
@@ -202,6 +202,7 @@ int main()
 {
 	Scene s = parse();
 	cout << s.getCam() << endl;
+	cout << s.getEcran() << endl;
 
 	//c.testParsing();
 	return 0;
