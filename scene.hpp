@@ -1,6 +1,7 @@
 #ifndef SCENE_H_INCLUDED
 #define SCENE_H_INCLUDED
 #include <vector>
+#include <iostream>
 #include "sphere.hpp"
 #include "ecran.hpp"
 #include "source.hpp"
@@ -19,7 +20,7 @@ public:
 	Scene();
 	Scene(const Point c, const Ecran e, const Source s);
 	Rayon genererRayon(Point p);
-	Point& getCam() const {return &camera;}
+	Point getCam() const {return camera;}
 	Ecran getEcran() const {return ecran;}
 	Source getSource() const {return source;}
 	std::vector<Sphere> getSpheres() const {return spheres;}
@@ -27,5 +28,11 @@ public:
 	void setEcran(const Ecran ecran) {this->ecran = ecran;}
 	void addSphere(const Sphere s);
 };
+
+Scene parse();
+void passerCommentaires(std::ifstream &stream);
+void passerBlancs(std::ifstream &stream);
+std::ostream& operator<<( std::ostream &flux,const Ecran & e );
+std::ostream& operator<<( std::ostream &flux,const Point & p );
 
 #endif 

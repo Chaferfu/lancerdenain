@@ -1,6 +1,5 @@
 #include <iostream>
 #include "point.hpp"
-#include "controleur.hpp"
 
 Point::Point(){
 	x= 40;
@@ -14,5 +13,5 @@ Point::Point(const float x, const float y, const float z){
 
 void Point::afficher(std::ostream &flux) const
 {
-    flux << "Point:" << "\n" << "x :"<< x << "  y:" << y << "z:" << z << "\n\n" << std::endl;
+    flux << "Point:  " << "x :"<< x << "  y:" << y << "  z:" << z << "\n\n" << std::endl;
 }

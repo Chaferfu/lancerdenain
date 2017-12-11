@@ -1,8 +1,8 @@
 #include <iostream>
 #include <ostream>
 #include "point.hpp"
+#include "scene.hpp"
 #include "ecran.hpp"
-#include "controleur.hpp"
 
 
 
