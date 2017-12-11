@@ -9,10 +9,10 @@ private:
 public:
 	Point();
 	Point(const float x, const float y, const float z);
-	float getX() const {return x;}
+	float& getX() const {return &x;}
 	float getY() const {return y;}
 	float getZ() const {return z;}
-	void setX(const float x) {this->x = x;}
+	void setX(const float& x) {this->x = x; std::cout << this->x << std::endl;}
 	void setY(const float y) {this->y = y;}
 	void setZ(const float z) {this->z = z;}
 	void afficher(std::ostream &flux) const;	

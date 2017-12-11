@@ -30,7 +30,7 @@ void Controleur::parse()
 {
 
 	ifstream stream("In.txt", ifstream::in);
-	char* line = NULL;
+	char line[1000];
 
 	passerCommentaires(stream);
 
@@ -38,7 +38,8 @@ void Controleur::parse()
 	//creation camera
 
 	stream.getline(line, 5, ' ');
-	scene.getCam().setX(atoi(line));
+	scene.getCam().setX(atof(line));
+	cout << scene.getCam().getX() << endl;
 	stream.getline(line, 5, ' ');
 	scene.getCam().setY(atoi(line));
 	stream.getline(line, 5, '\n');
@@ -201,6 +202,12 @@ void Controleur::passerBlancs(ifstream &stream)
 int main()
 {
 	Controleur c;
-	c.testParsing();
+
+	c.parse();
+	cout << c.getScene().getCam().getX() << endl;
+	cout << c.getScene().getCam().getY() << endl;
+	cout << c.getScene().getCam().getZ() << endl;
+
+	//c.testParsing();
 	return 0;
 }

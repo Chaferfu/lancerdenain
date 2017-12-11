@@ -4,6 +4,7 @@
 #include "sphere.hpp"
 #include "ecran.hpp"
 #include "source.hpp"
+#include "rayon.hpp"
 
 class Scene {
 private:
@@ -18,7 +19,7 @@ public:
 	Scene();
 	Scene(const Point c, const Ecran e, const Source s);
 	Rayon genererRayon(Point p);
-	Point getCam() const {return camera;}
+	Point& getCam() const {return &camera;}
 	Ecran getEcran() const {return ecran;}
 	Source getSource() const {return source;}
 	std::vector<Sphere> getSpheres() const {return spheres;}
