@@ -10,8 +10,8 @@ public:
 	Controleur(const Scene s);
 	Scene getScene() const {return scene;}
 	void parse();
-	void passerCommentaires(std::ifstream const &stream);
-	void passerBlancs(std::ifstream const &stream);
+	void passerCommentaires(std::ifstream &stream);
+	void passerBlancs(std::ifstream &stream);
 };
 
 #endif

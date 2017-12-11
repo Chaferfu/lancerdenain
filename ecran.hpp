@@ -16,9 +16,10 @@ public:
 	Point getTopLeft() const {return topLeft;}
 	Point getTopRight() const {return topRight;}
 	Point getBottomLeft() const {return bottomLeft;}
-	void setTopLeft(Point p) {topLeft = p;}
-	void setTopRight(Point p) {topRight = p;}
-	void setBottomLeft(Point p) {bottomLeft = p;}
+	void setTopLeft(const Point p) {topLeft = p;}
+	void setTopRight(const Point p) {topRight = p;}
+	void setBottomLeft(const Point p) {bottomLeft = p;}
+	void setResolution(const int r) {resolution = r;}
 };
 
 #endif
