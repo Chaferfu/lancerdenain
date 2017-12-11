@@ -20,6 +20,7 @@ public:
 	void setTopRight(const Point p) {topRight = p;}
 	void setBottomLeft(const Point p) {bottomLeft = p;}
 	void setResolution(const int r) {resolution = r;}
+	void afficher(std::ostream &flux) const;	
 };
 
 #endif

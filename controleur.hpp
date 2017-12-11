@@ -8,6 +8,7 @@ private:
 
 public:
 	Controleur(const Scene s);
+	Controleur();
 	Scene getScene() const {return scene;}
 	void parse();
 	void passerCommentaires(std::ifstream &stream);

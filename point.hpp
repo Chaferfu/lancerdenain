@@ -14,6 +14,8 @@ public:
 	void setX(const float x) {this->x = x;}
 	void setY(const float y) {this->y = y;}
 	void setZ(const float z) {this->z = z;}
+	void afficher(std::ostream &flux) const;	
+
 };
 
 #endif
