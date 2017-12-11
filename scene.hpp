@@ -18,7 +18,7 @@ private:
 public:
 	Couleur getBackground() const {return background;};
 	Scene();
-	Scene(const Point c, const Ecran e, const Source s);
+	Scene(const Point c, const Ecran e, const Source s, Couleur bg, std::vector<Sphere> v);
 	Rayon genererRayon(Point p);
 	Point getCam() const {return camera;}
 	Ecran getEcran() const {return ecran;}

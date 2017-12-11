@@ -16,11 +16,13 @@ Scene::Scene(){
 	
 }
 
-Scene::Scene(Point c, Ecran e, Source s)
+Scene::Scene(Point c, Ecran e, Source s, Couleur coul, vector<Sphere> v)
 {
 	camera = c;
 	ecran = e;
 	source = s;
+	background = coul;
+	spheres = v;
 }
 
 void Scene::addSphere(const Sphere s)
@@ -37,99 +39,110 @@ Scene parse()
 {
 
 	ifstream stream("In.txt", ifstream::in);
-	char line[1000];
+	//char line[1000];
+	string str;
 
 	passerCommentaires(stream);
 
 
 	//creation camera
 
-	float x, y, z;
-	stream.getline(line, 5, ' ');
-	x = atof(line);
-	stream.getline(line, 5, ' ');
-	y = atof(line);
-	stream.getline(line, 5, '\n');
-	z = atof(line);
+	float x, y, z, radius, reflx;
+	int res, r, g, b;
+
+	getline(stream, str);
+	istringstream iss(str);
+	if(!(iss >> x >> y >> z))
+	{
+		cout << "hmmm ça bug" << endl;
+	}
 	
 	Point cam = Point(x, y, z);
-/*
+
 	passerBlancs(stream);
 	passerCommentaires(stream);
 
 	//creation screen pos top left
 
-	stream.getline(line, 5, ' ');
-	scene.getEcran().getTopLeft().setX(atof(line));
-	stream.getline(line, 5, ' ');
-	scene.getEcran().getTopLeft().setY(atoi(line));
-	stream.getline(line, 5, '\n');
-	scene.getEcran().getTopLeft().setZ(atoi(line));
-
-	passerBlancs(stream);
-	passerCommentaires(stream);
-
-	stream.getline(line, 5, ' ');
-	scene.getEcran().getTopRight().setX(atoi(line));
-	stream.getline(line, 5, ' ');
-	scene.getEcran().getTopRight().setY(atoi(line));
-	stream.getline(line, 5, '\n');
-	scene.getEcran().getTopRight().setZ(atoi(line));
-
-	passerBlancs(stream);
-	passerCommentaires(stream);
-
-	stream.getline(line, 5, ' ');
-	scene.getEcran().getBottomLeft().setX(atoi(line));
-	stream.getline(line, 5, ' ');
-	scene.getEcran().getBottomLeft().setY(atoi(line));
-	stream.getline(line, 5, '\n');
-	scene.getEcran().getBottomLeft().setZ(atoi(line));
-
-	passerBlancs(stream);
-	passerCommentaires(stream);
-
-	stream.getline(line, 5, '\n');
-	scene.getEcran().setResolution(atoi(line));
-
-	passerBlancs(stream);
-	passerCommentaires(stream);
-
-	stream.getline(line, 5, ' ');
-	scene.getBackground().setR(atoi(line));
-	stream.getline(line, 5, ' ');
-	scene.getBackground().setG(atoi(line));
-	stream.getline(line, 5, '\n');
-	scene.getBackground().setB(atoi(line));
-
-	passerBlancs(stream);
-	passerCommentaires(stream);
-
-	stream.getline(line, 5, ' ');
-	scene.getSource().getPos().setX(atoi(line));
-	stream.getline(line, 5, ' ');
-	scene.getSource().getPos().setX(atoi(line));
-	stream.getline(line, 5, ' ');
-	scene.getSource().getPos().setX(atoi(line));
-	stream.getline(line, 5, ' ');
-	scene.getSource().getCouleur().setR(atoi(line));
-	stream.getline(line, 5, ' ');
-	scene.getSource().getCouleur().setG(atoi(line));
-	stream.getline(line, 5, '\n');
-	scene.getSource().getCouleur().setB(atoi(line));
-
-	passerBlancs(stream);
-	passerCommentaires(stream);
-
-	string line2(line);
-
-	while(getline(stream, line2))
+	getline(stream, str);
+	iss = (istringstream(str));
+	if(!(iss >> x >> y >> z))
 	{
-		istringstream iss(line2);
+		cout << "hmmm ça bug" << endl;
+	}
+
+	Point pointTL(x,y,z);
+
+	passerBlancs(stream);
+	passerCommentaires(stream);
+
+	getline(stream, str);
+	iss = (istringstream(str));
+	if(!(iss >> x >> y >> z))
+	{
+		cout << "hmmm ça bug" << endl;
+	}
+
+	Point pointTR(x,y,z);
+
+	passerBlancs(stream);
+	passerCommentaires(stream);
+
+	getline(stream, str);
+	iss = (istringstream(str));
+	if(!(iss >> x >> y >> z))
+	{
+		cout << "hmmm ça bug" << endl;
+	}
+
+	Point pointBT(x,y,z);
+
+	passerBlancs(stream);
+	passerCommentaires(stream);
+
+	getline(stream, str);
+	iss = (istringstream(str));
+	if(!(iss >> res))
+	{
+		cout << "hmmm ça bug" << endl;
+	}
+
+	Ecran e(pointTL,pointTR,pointBT,res);
+
+	passerBlancs(stream);
+	passerCommentaires(stream);
+
+	getline(stream, str);
+	iss = (istringstream(str));
+	if(!(iss >> r >> g >> b))
+	{
+		cout << "hmmm ça bug" << endl;
+	}
+
+	Couleur bg(r,g,b);
+
+	passerBlancs(stream);
+	passerCommentaires(stream);
+
+	getline(stream, str);
+	iss = (istringstream(str));
+	if(!(iss >> x >> y >> z >> r >> g >> b))
+	{
+		cout << "hmmm ça bug" << endl;
+	}
+
+	Source(Point(x,y,z), Couleur(r,g,b));
+
+	passerBlancs(stream);
+	passerCommentaires(stream);
+
+	vector<Sphere> v;
+
+	while(getline(stream, str))
+	{
+		istringstream iss(str);
 
 		string type;
-		int centerX, centerY, centerZ, r, colorR, colorG, colorB;
-		float reflx;
 
 		if(!(iss >> type >> centerX >> centerY >> centerZ >> r >> colorR >> colorG >> colorB >> reflx))
 		{
@@ -140,7 +153,7 @@ Scene parse()
 		if(!strcmp(type.c_str(), "sphere:"))
 		{
 			Sphere s(centerX, centerY, centerZ, r, colorR, colorG, colorB, reflx);
-			scene.getSpheres().push_back(s);
+			v.push_back(s);
 		}
 		else
 		{
@@ -149,32 +162,8 @@ Scene parse()
 
 	}
 
-	while(getline(stream, line))
-	{
-		istringstream iss(line);
-
-		string type;
-		int centerX, centerY, centerZ, r, colorR, colorG, colorB, reflx;
-
-		if(!(iss >> type >> centerX >> centerY >> centerZ >> r >> colorR >> colorG >> colorB >> reflx))
-		{
-			cout << "hmmm ça bug" << endl;
-			break;
-		}
-
-		if(!strcmp(type, "sphere"))
-		{
-			Sphere s(centerX, centerY, centerZ, r, colorR, colorG, colorB, reflx);
-			scene.spheres.push_back(s);
-		}
-		else
-		{
-			cout << "c'est pas une shere mon gars" << endl;
-		}
-
-	}
-*/Ecran e ; Source s;
-	return Scene(cam, e, s);
+	
+	return Scene(cam, e, s, bg, v);
 }
 
 
@@ -212,9 +201,7 @@ ostream& operator<<( ostream &flux, Point const& p )
 int main()
 {
 	Scene s = parse();
-	cout << s.getCam().getX() << endl;
-	cout << s.getCam().getY() << endl;
-	cout << s.getCam().getZ() << endl;
+	cout << s.getCam() << endl;
 
 	//c.testParsing();
 	return 0;
