@@ -15,6 +15,7 @@ public:
 	void setG(const int g) {this->g = g;}
 	void setB(const int b) {this->b = b;}
 	void calculerCouleur(const int e, const float angle, const Couleur ci, const Couleur cs);
+	void afficher(std::ostream &flux) const;
 };
 
 #endif

@@ -11,6 +11,7 @@ public:
 	Source(Point p, Couleur c);
 	Point getPos() const {return pos;}
 	Couleur getCouleur() const {return couleur;}
+	void afficher(std::ostream &flux) const;
 };
 
 #endif

@@ -1,5 +1,6 @@
 #ifndef SCENE_H_INCLUDED
 #define SCENE_H_INCLUDED
+
 #include <vector>
 #include <iostream>
 #include "sphere.hpp"
@@ -34,5 +35,9 @@ void passerCommentaires(std::ifstream &stream);
 void passerBlancs(std::ifstream &stream);
 std::ostream& operator<<( std::ostream &flux,const Ecran & e );
 std::ostream& operator<<( std::ostream &flux,const Point & p );
+std::ostream& operator<<( std::ostream &flux,const Source & s );
+std::ostream& operator<<( std::ostream &flux,const Couleur & c );
+
+
 
 #endif 

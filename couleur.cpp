@@ -1,3 +1,5 @@
+#include <iostream>
+#include <ostream>
 #include "couleur.hpp"
 #include <math.h>
 using namespace std;
@@ -17,4 +19,9 @@ void Couleur::calculerCouleur(const int e, const float angle, const Couleur ci, 
 	r = e*cos(angle)*ci.getR()*cs.getR()/255;
 	g = e*cos(angle)*ci.getG()*cs.getG()/255;
 	b = e*cos(angle)*ci.getB()*cs.getB()/255;
+}
+
+void Couleur::afficher(std::ostream &flux) const
+{
+	flux << "R: " << r << "G :" << g << "B: " << b << endl;
 }

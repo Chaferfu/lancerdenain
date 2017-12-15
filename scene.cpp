@@ -198,11 +198,25 @@ ostream& operator<<( ostream &flux, Point const& p )
     return flux;
 }
 
+ostream& operator<<( std::ostream &flux,const Source & s )
+{
+	s.afficher(flux);
+	return flux;
+}
+
+ostream& operator<<( std::ostream &flux,const Couleur & c )
+{
+	c.afficher(flux);
+	return flux;
+}
+
+
 int main()
 {
 	Scene s = parse();
 	cout << s.getCam() << endl;
 	cout << s.getEcran() << endl;
+	cout << "back :" << s.getBac
 
 	//c.testParsing();
 	return 0;
