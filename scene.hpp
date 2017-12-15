@@ -28,6 +28,7 @@ public:
 	void setCam(const Point cam) {camera = cam;}
 	void setEcran(const Ecran ecran) {this->ecran = ecran;}
 	void addSphere(const Sphere s);
+	void ecrirePPM();
 };
 
 Scene parse();

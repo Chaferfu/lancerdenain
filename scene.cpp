@@ -35,6 +35,21 @@ Rayon Scene::genererRayon(Point p){
 }
 
 
+void Scene::ecrirePPM(){
+
+	try{
+		ofstream fichier("image.txt", ios::out | ios::trunc);
+
+		fichier << "P3" << endl;
+		fichier << "" << endl;
+		fichier << "255" << endl;
+
+		fichier.close();
+	} catch(exception const& e){
+		cerr << "Erreur : " << e.what() << endl;
+	}
+}
+
 Scene parse()
 {
 
@@ -214,10 +229,13 @@ ostream& operator<<( std::ostream &flux,const Couleur & c )
 int main()
 {
 	Scene s = parse();
-	cout << s.getCam() << endl;
+	/*cout << s.getCam() << endl;
 	cout << s.getEcran() << endl;
-	cout << "back :" << s.getBac
+	cout << "back :" << s.getBac*/
 
 	//c.testParsing();
+
+	s.ecrirePPM();
+
 	return 0;
 }

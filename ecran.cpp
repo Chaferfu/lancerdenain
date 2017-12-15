@@ -5,8 +5,6 @@
 #include "ecran.hpp"
 
 
-
-
 void Ecran::afficher(std::ostream &flux) const
 {
     flux << "Ecran: \n" << "posTL :"<< topLeft << "  posTR :" << 
