@@ -1,3 +1,6 @@
+#include <iostream>
+#include <ostream>
+#include "scene.hpp"
 #include "sphere.hpp"
 
 Sphere::Sphere(const float r, const Point c, const Couleur coul, const float reflex){
@@ -17,4 +20,9 @@ Sphere::Sphere(const float centerX, const float centerY,const float centerZ,cons
 	couleur.setG(colorG);
 	couleur.setB(colorB);
 	reflexivite = reflx;
+}
+
+void Sphere::afficher(std::ostream &flux) const
+{
+	flux << "SPHERE ::\tposition:" << centre << " rayon:" << rayon << " couleur:" << couleur << " reflexivite" << reflexivite << std::endl;
 }

@@ -162,18 +162,24 @@ Scene parse()
 
 	}
 
-	
+	//TODO fermer le fichier
 	return Scene(cam, e, s, bg, v);
 }
 
 
-/*
+
 void testParsing()
 {
-	parse();
-	cout << getScene().getCam() << endl;
-
-}*/
+	Scene s = parse();
+	cout << s.getCam() << endl;
+	cout << s.getEcran() << endl;
+	cout << "back :" << s.getBackground() << endl;
+	cout << s.getSource() << endl;
+	for(Sphere sp : s.getSpheres())
+	{
+		cout << sp << endl;
+	}
+}
 
 void passerCommentaires(ifstream &stream)
 {
@@ -210,14 +216,17 @@ ostream& operator<<( std::ostream &flux,const Couleur & c )
 	return flux;
 }
 
+ostream& operator<<( std::ostream &flux,const Sphere & s )
+{
+	s.afficher(flux);
+	return flux;
+}
+
+
 
 int main()
 {
-	Scene s = parse();
-	cout << s.getCam() << endl;
-	cout << s.getEcran() << endl;
-	cout << "back :" << s.getBac
 
-	//c.testParsing();
+
 	return 0;
 }

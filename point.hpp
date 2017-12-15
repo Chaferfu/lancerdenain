@@ -16,6 +16,7 @@ public:
 	void setY(const float y) {this->y = y;}
 	void setZ(const float z) {this->z = z;}
 	void afficher(std::ostream &flux) const;	
+	float distance(const Point other) const;
 
 
 };
