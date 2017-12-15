@@ -17,6 +17,8 @@ public:
 	float getReflex() const {return reflexivite;}
 	Point getCentre() const {return centre;}
 	Couleur getCouleur() const {return couleur;}
+	void afficher(std::ostream &flux) const;
+
 };
 
 #endif

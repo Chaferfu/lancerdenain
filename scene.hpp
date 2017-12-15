@@ -38,6 +38,8 @@ std::ostream& operator<<( std::ostream &flux,const Ecran & e );
 std::ostream& operator<<( std::ostream &flux,const Point & p );
 std::ostream& operator<<( std::ostream &flux,const Source & s );
 std::ostream& operator<<( std::ostream &flux,const Couleur & c );
+std::ostream& operator<<( std::ostream &flux,const Sphere & c );
+
 
 
 
