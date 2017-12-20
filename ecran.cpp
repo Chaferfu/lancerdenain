@@ -3,6 +3,7 @@
 #include "point.hpp"
 #include "scene.hpp"
 #include "ecran.hpp"
+using namespace std;
 
 
 void Ecran::afficher(std::ostream &flux) const
@@ -21,4 +22,13 @@ Ecran::Ecran(const int res, const Point tl, const Point tr, const Point bl){
 	topLeft = tl;
 	topRight = tr;
 	bottomLeft = bl;
+
+	int resoVert = res;
+	vector<vector<Couleur>>::iterator it;
+
+	/*pixels.resize(res);
+	for(unsigned int i = 0; i < pixels.size(); i++)
+		pixels.get(i).resize(res);*/
+	//for(it = pixels.begin(), it != pixels.end(); ++it)
+
 }

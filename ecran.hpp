@@ -1,5 +1,6 @@
 #ifndef ECRAN_H_INCLUDED
 #define ECRAN_H_INCLUDED
+#include <vector>
 
 class Ecran{
 private:
@@ -7,7 +8,7 @@ private:
 	Point topLeft;
 	Point topRight;
 	Point bottomLeft;
-	Point points[];
+	std::vector<std::vector<int>> pixels;
 
 public:
 	Ecran();
@@ -16,6 +17,7 @@ public:
 	Point getTopLeft() const {return topLeft;}
 	Point getTopRight() const {return topRight;}
 	Point getBottomLeft() const {return bottomLeft;}
+	std::vector<std::vector<int>> getPixels() const {return pixels;}
 	void setTopLeft(const Point p) {topLeft = p;}
 	void setTopRight(const Point p) {topRight = p;}
 	void setBottomLeft(const Point p) {bottomLeft = p;}

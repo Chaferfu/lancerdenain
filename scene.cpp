@@ -41,7 +41,7 @@ void Scene::ecrirePPM(){
 		ofstream fichier("image.txt", ios::out | ios::trunc);
 
 		fichier << "P3" << endl;
-		fichier << "" << endl;
+		fichier << ecran.getReso() << " " << ecran.getReso() << endl;
 		fichier << "255" << endl;
 
 		fichier.close();
