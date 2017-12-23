@@ -32,10 +32,10 @@ void Scene::addSphere(const Sphere s){
  * proche de la caméra s'il existe, un point aux coordonnées infinies 
  * sinon.
  */
-Point Scene::getIntersection(Rayon r){
+PointColore Scene::getIntersection(Rayon r){
 	float a, b, c; // Coefficients du polynome d'ordre 2
 	float delta, t = numeric_limits<float>::infinity();
-	//float delta, t = 1000.0f;
+	Couleur coul = getBackground();
 
 	for(Sphere s : spheres){
 		// Calcul des coefficients du polynome
@@ -47,11 +47,23 @@ Point Scene::getIntersection(Rayon r){
 		delta = pow(b, 2) - 4.0f*a*c;
 
 		//Calcul des racines
-		if(delta == 0.0f) t = min(-b/(2*a), t);
-		else if(delta > 0.0f) t = min(min((-b-sqrt(delta))/(2*a), (-b+sqrt(delta))/(2*a)), t);
+		//if(delta == 0.0f) t = min(-b/(2*a), t);
+		if(delta == 0.0f){
+			if(t > -b/(2*a)){
+				t = -b/(2*a);
+				coul = s.getCouleur();
+			}
+		}
+		//else if(delta > 0.0f) t = min(min((-b-sqrt(delta))/(2*a), (-b+sqrt(delta))/(2*a)), t);
+		else if(delta > 0.0f){
+			if(t > min((-b-sqrt(delta))/(2*a), (-b+sqrt(delta))/(2*a))){
+				t = min((-b-sqrt(delta))/(2*a), (-b+sqrt(delta))/(2*a));
+				coul = s.getCouleur();
+			}
+		}
 	}
 
-	return Point(r.getOrigine().getX() + t*r.getDirection().getX(), r.getOrigine().getY() + t*r.getDirection().getY(), r.getOrigine().getZ() + t*r.getDirection().getZ());
+	return PointColore(r.getOrigine().getX() + t*r.getDirection().getX(), r.getOrigine().getY() + t*r.getDirection().getY(), r.getOrigine().getZ() + t*r.getDirection().getZ(), coul);
 }
 
 void Scene::ecrirePPM(){
@@ -65,7 +77,7 @@ void Scene::ecrirePPM(){
 		// A modifier quand on aura rempli le tableau de pixels
 		for(unsigned int i = 0; i < ecran.getResolutionVerticale(); i++){
 			for(unsigned int j = 0; j < ecran.getReso(); j++)
-				fichier << getBackground() << endl;
+				fichier << getEcran().getPixels()[i][j] << endl;
 		}
 
 		fichier.close();
@@ -75,7 +87,12 @@ void Scene::ecrirePPM(){
 }
 
 void Scene::rayTracing(){
-	
+	for(unsigned int i = 0; i < ecran.getResolutionVerticale(); i++){
+			for(unsigned int j = 0; j < ecran.getReso(); j++){
+				//cout << getIntersection(Rayon(getCam(), Point(-5, -10, 30.0f))).getCouleur() << endl;
+				getEcran().getPixels()[i][j] = getIntersection(Rayon(getCam(), Point(-5, -5, 30.0f))).getCouleur();
+			}
+	}
 }
 
 Scene parse()
@@ -276,7 +293,7 @@ int main()
 
 	s.rayTracing();
 
-	// cout << s.getIntersection(Rayon(s.getCam(), Point(-5, -10, 30.0f))) << endl;
+	//cout << s.getIntersection(Rayon(s.getCam(), Point(-5.0f, -5.0f, 30.0f))) << endl;
 
 	s.ecrirePPM();
 
