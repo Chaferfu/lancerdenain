@@ -59,11 +59,11 @@ void Scene::ecrirePPM(){
 		ofstream fichier("image.ppm", ios::out | ios::trunc);
 
 		fichier << "P3" << endl;
-		fichier << ecran.getReso() << " " << ecran.getPixels().size() << endl;
+		fichier << ecran.getReso() << " " << ecran.getResolutionVerticale() << endl;
 		fichier << "255" << endl;
 
 		// A modifier quand on aura rempli le tableau de pixels
-		for(unsigned int i = 0; i < ecran.getPixels().size(); i++){
+		for(unsigned int i = 0; i < ecran.getResolutionVerticale(); i++){
 			for(unsigned int j = 0; j < ecran.getReso(); j++)
 				fichier << getBackground() << endl;
 		}
@@ -72,6 +72,10 @@ void Scene::ecrirePPM(){
 	} catch(exception const& e){
 		cerr << "Erreur : " << e.what() << endl;
 	}
+}
+
+void Scene::rayTracing(){
+	
 }
 
 Scene parse()
@@ -202,6 +206,7 @@ Scene parse()
 	}
 
 	//TODO fermer le fichier
+	stream.close();
 	return Scene(cam, e, s, bg, v);
 }
 
@@ -269,7 +274,9 @@ int main()
 
 	//c.testParsing();
 
-	cout << s.getIntersection(Rayon(s.getCam(), Point(-5, -10, 30.0f))) << endl;
+	s.rayTracing();
+
+	// cout << s.getIntersection(Rayon(s.getCam(), Point(-5, -10, 30.0f))) << endl;
 
 	s.ecrirePPM();
 

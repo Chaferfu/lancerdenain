@@ -30,6 +30,7 @@ public:
 	void addSphere(const Sphere s);
 	void ecrirePPM();
 	Point getIntersection(Rayon r);
+	void rayTracing();
 };
 
 Scene parse();
