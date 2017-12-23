@@ -8,7 +8,7 @@ Couleur::Couleur(){
 	
 }
 
-Couleur::Couleur(const int r, const int g, const int b){
+Couleur::Couleur(const unsigned char r, const unsigned char g, const unsigned char b){
 	this->r = r;
 	this->g = g;
 	this->b = b;

@@ -30,3 +30,9 @@ Ecran::Ecran(const int res, const Point tl, const Point tr, const Point bl){
 		pixels.at(i).resize(res);
 
 }
+
+// Je pensais qu'on aurait besoin à cause du resize() de "pixels", mais 
+// valgrind dit que tout va bien
+Ecran::~Ecran(){
+	
+}

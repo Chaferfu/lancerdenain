@@ -4,7 +4,7 @@
 
 class Ecran{
 private:
-	int resolution;
+	unsigned int resolution;
 	Point topLeft;
 	Point topRight;
 	Point bottomLeft;
@@ -13,7 +13,8 @@ private:
 public:
 	Ecran();
 	Ecran(const int res, const Point tl, const Point tr, const Point bl);
-	int getReso() const {return resolution;}
+	~Ecran();
+	unsigned int getReso() const {return resolution;}
 	Point getTopLeft() const {return topLeft;}
 	Point getTopRight() const {return topRight;}
 	Point getBottomLeft() const {return bottomLeft;}

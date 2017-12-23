@@ -16,8 +16,7 @@ Scene::Scene(){
 	
 }
 
-Scene::Scene(Point c, Ecran e, Source s, Couleur coul, vector<Sphere> v)
-{
+Scene::Scene(Point c, Ecran e, Source s, Couleur coul, vector<Sphere> v){
 	camera = c;
 	ecran = e;
 	source = s;
@@ -25,15 +24,34 @@ Scene::Scene(Point c, Ecran e, Source s, Couleur coul, vector<Sphere> v)
 	spheres = v;
 }
 
-void Scene::addSphere(const Sphere s)
-{
+void Scene::addSphere(const Sphere s){
 	spheres.push_back(s);
 }
 
-Rayon Scene::genererRayon(Point p){
-	return Rayon(camera, p);
-}
+/* Renvoie le point d'intersection entre un rayon et l'objet le plus 
+ * proche de la caméra s'il existe, un point aux coordonnées infinies 
+ * sinon.
+ */
+Point Scene::getIntersection(Rayon r){
+	float a, b, c; // Coefficients du polynome d'ordre 2
+	float delta, t = numeric_limits<float>::infinity();
 
+	for(Sphere s : spheres){
+		// Calcul des coefficients du polynome
+		a = pow(r.getDirection().getX(), 2) + pow(r.getDirection().getY(), 2) + pow(r.getDirection().getZ(), 2);
+		b = 2.0f*(r.getOrigine().getX() - s.getCentre().getX())*r.getDirection().getX() + 2.0f*(r.getOrigine().getY() - s.getCentre().getY())*r.getDirection().getY() + 2.0f*(r.getOrigine().getZ() - s.getCentre().getZ())*r.getDirection().getZ();
+		c = pow((r.getOrigine().getX() - s.getCentre().getX()), 2) + pow((r.getOrigine().getY() - s.getCentre().getY()), 2) + pow((r.getOrigine().getZ() - s.getCentre().getZ()), 2) - pow(s.getRayon(), 2);
+	
+		// Calcul du determinant
+		delta = pow(b, 2) - 4.0f*a*c;
+
+		//Calcul des racines
+		if(delta == 0.0f) t = min(-b/(2*a), t);
+		else if(delta > 0.0f) t = min(min((-b-sqrt(delta))/(2*a), (-b+sqrt(delta))/(2*a)), t);
+	}
+
+	return Point(r.getOrigine().getX() + t*r.getDirection().getX(), r.getOrigine().getY() + t*r.getDirection().getY(), r.getOrigine().getZ() + t*r.getDirection().getZ());
+}
 
 void Scene::ecrirePPM(){
 	try{
@@ -44,7 +62,7 @@ void Scene::ecrirePPM(){
 		fichier << "255" << endl;
 
 		for(unsigned int i = 0; i < ecran.getPixels().size(); i++){
-			for(unsigned int j = 0; j < ecran.getReso(); i++)
+			for(unsigned int j = 0; j < ecran.getReso(); j++)
 				fichier << getBackground() << endl;
 		}
 
@@ -185,8 +203,6 @@ Scene parse()
 	return Scene(cam, e, s, bg, v);
 }
 
-
-
 void testParsing()
 {
 	Scene s = parse();
@@ -203,7 +219,6 @@ void testParsing()
 void passerCommentaires(ifstream &stream)
 {
 	while(stream.peek() == '#') stream.ignore(256,'\n');
-
 }
 
 void passerBlancs(ifstream &stream)
@@ -252,8 +267,12 @@ int main()
 
 	//c.testParsing();
 
-	s.ecrirePPM();
+	Rayon r(s.getCam(), Point(97.0f, 90.0f, 60.0f));
 
+
+	cout << s.getIntersection(r) << endl;
+
+	s.ecrirePPM();
 
 	return 0;
 }

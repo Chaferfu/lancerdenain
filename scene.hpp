@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <iostream>
+#include <algorithm>
 #include "sphere.hpp"
 #include "ecran.hpp"
 #include "source.hpp"
@@ -20,7 +21,6 @@ public:
 	Couleur getBackground() const {return background;};
 	Scene();
 	Scene(const Point c, const Ecran e, const Source s, Couleur bg, std::vector<Sphere> v);
-	Rayon genererRayon(Point p);
 	Point getCam() const {return camera;}
 	Ecran getEcran() const {return ecran;}
 	Source getSource() const {return source;}
@@ -29,6 +29,7 @@ public:
 	void setEcran(const Ecran ecran) {this->ecran = ecran;}
 	void addSphere(const Sphere s);
 	void ecrirePPM();
+	Point getIntersection(Rayon r);
 };
 
 Scene parse();
