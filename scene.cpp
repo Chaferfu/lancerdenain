@@ -58,10 +58,10 @@ void Scene::ecrirePPM(){
 		ofstream fichier("image.ppm", ios::out | ios::trunc);
 
 		fichier << "P3" << endl;
-		fichier << ecran.getReso() << " " << ecran.getPixels().size() << endl;
+		fichier << ecran.getReso() << " " << ecran.getResolutionVerticale() << endl;
 		fichier << "255" << endl;
 
-		for(unsigned int i = 0; i < ecran.getPixels().size(); i++){
+		for(unsigned int i = 0; i < ecran.getResolutionVerticale(); i++){
 			for(unsigned int j = 0; j < ecran.getReso(); j++)
 				fichier << getBackground() << endl;
 		}

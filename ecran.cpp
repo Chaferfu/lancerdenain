@@ -26,7 +26,7 @@ Ecran::Ecran(const int res, const Point tl, const Point tr, const Point bl){
 	resolutionVerticale = (topLeft.getY() - bottomLeft.getY())*(res/(topRight.getX() - topLeft.getX()));
 
 	pixels = new Couleur*[resolutionVerticale];
-	for(int i = 0; i < resolutionVerticale; ++i) pixels[i] = new int[resolution];
+	for(unsigned int i = 0; i < resolutionVerticale; ++i) pixels[i] = new Couleur[resolution];
 
 }
 
@@ -34,7 +34,7 @@ Ecran::Ecran(const int res, const Point tl, const Point tr, const Point bl){
 // valgrind dit que tout va bien
 Ecran::~Ecran(){
 
-	for(int i = 0; i < resolutionVerticale; ++i) delete pixels[i]; 
+	for(unsigned int i = 0; i < resolutionVerticale; ++i) delete pixels[i]; 
 	delete pixels;
 
 	
