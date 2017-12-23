@@ -90,7 +90,7 @@ void Scene::rayTracing(){
 	for(unsigned int i = 0; i < ecran.getResolutionVerticale(); i++){
 			for(unsigned int j = 0; j < ecran.getReso(); j++){
 				//cout << getIntersection(Rayon(getCam(), Point(-5, -10, 30.0f))).getCouleur() << endl;
-				getEcran().getPixels()[i][j] = getIntersection(Rayon(getCam(), Point(-5, -5, 30.0f))).getCouleur();
+				getEcran().getPixels()[i][j] = getIntersection(Rayon(getCam(), Point(i*10+j, i*10+j, 30.0f))).getCouleur();
 			}
 	}
 }
