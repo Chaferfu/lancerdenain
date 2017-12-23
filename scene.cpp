@@ -69,7 +69,7 @@ Scene parse()
 	istringstream iss(str);
 	if(!(iss >> x >> y >> z))
 	{
-		cout << "hmmm ça bug" << endl;
+		cout << "hmmm ça bug 1" << endl;
 	}
 	
 	Point cam = Point(x, y, z);
@@ -83,7 +83,7 @@ Scene parse()
 	iss = (istringstream(str));
 	if(!(iss >> x >> y >> z))
 	{
-		cout << "hmmm ça bug" << endl;
+		cout << "hmmm ça bug 2" << endl;
 	}
 
 	Point pointTL(x,y,z);
@@ -95,7 +95,7 @@ Scene parse()
 	iss = (istringstream(str));
 	if(!(iss >> x >> y >> z))
 	{
-		cout << "hmmm ça bug" << endl;
+		cout << "hmmm ça bug 3" << endl;
 	}
 
 	Point pointTR(x,y,z);
@@ -107,7 +107,7 @@ Scene parse()
 	iss = (istringstream(str));
 	if(!(iss >> x >> y >> z))
 	{
-		cout << "hmmm ça bug" << endl;
+		cout << "hmmm ça bug 4" << endl;
 	}
 
 	Point pointBT(x,y,z);
@@ -119,7 +119,7 @@ Scene parse()
 	iss = (istringstream(str));
 	if(!(iss >> res))
 	{
-		cout << "hmmm ça bug" << endl;
+		cout << "hmmm ça bug 5" << endl;
 	}
 
 	Ecran e(res, pointTL,pointTR,pointBT);
@@ -131,7 +131,7 @@ Scene parse()
 	iss = (istringstream(str));
 	if(!(iss >> r >> g >> b))
 	{
-		cout << "hmmm ça bug" << endl;
+		cout << "hmmm ça bug 6" << endl;
 	}
 
 	Couleur bg(r,g,b);
@@ -143,7 +143,7 @@ Scene parse()
 	iss = (istringstream(str));
 	if(!(iss >> x >> y >> z >> r >> g >> b))
 	{
-		cout << "hmmm ça bug" << endl;
+		cout << "hmmm ça bug 7" << endl;
 	}
 
 	Source s = Source(Point(x,y,z), Couleur(r,g,b));

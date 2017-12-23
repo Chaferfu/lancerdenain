@@ -23,12 +23,11 @@ Ecran::Ecran(const int res, const Point tl, const Point tr, const Point bl){
 	topRight = tr;
 	bottomLeft = bl;
 
-	int resoVert = res;
-	vector<vector<Couleur>>::iterator it;
+	// Calcul de la résolution verticale :
+	int resVert = (topLeft.getY() - bottomLeft.getY())*(res/(topRight.getX() - topLeft.getX()));
 
-	/*pixels.resize(res);
+	pixels.resize(resVert);
 	for(unsigned int i = 0; i < pixels.size(); i++)
-		pixels.get(i).resize(res);*/
-	//for(it = pixels.begin(), it != pixels.end(); ++it)
+		pixels.at(i).resize(res);
 
 }
