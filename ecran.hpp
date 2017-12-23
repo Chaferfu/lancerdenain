@@ -8,7 +8,7 @@ private:
 	Point topLeft;
 	Point topRight;
 	Point bottomLeft;
-	std::vector<std::vector<int>> pixels;
+	std::vector<std::vector<Couleur>> pixels;
 
 public:
 	Ecran();
@@ -18,7 +18,7 @@ public:
 	Point getTopLeft() const {return topLeft;}
 	Point getTopRight() const {return topRight;}
 	Point getBottomLeft() const {return bottomLeft;}
-	std::vector<std::vector<int>> getPixels() const {return pixels;}
+	std::vector<std::vector<Couleur>> getPixels() const {return pixels;}
 	void setTopLeft(const Point p) {topLeft = p;}
 	void setTopRight(const Point p) {topRight = p;}
 	void setBottomLeft(const Point p) {bottomLeft = p;}

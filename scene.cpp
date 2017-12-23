@@ -35,13 +35,14 @@ void Scene::addSphere(const Sphere s){
 Point Scene::getIntersection(Rayon r){
 	float a, b, c; // Coefficients du polynome d'ordre 2
 	float delta, t = numeric_limits<float>::infinity();
+	//float delta, t = 1000.0f;
 
 	for(Sphere s : spheres){
 		// Calcul des coefficients du polynome
 		a = pow(r.getDirection().getX(), 2) + pow(r.getDirection().getY(), 2) + pow(r.getDirection().getZ(), 2);
 		b = 2.0f*(r.getOrigine().getX() - s.getCentre().getX())*r.getDirection().getX() + 2.0f*(r.getOrigine().getY() - s.getCentre().getY())*r.getDirection().getY() + 2.0f*(r.getOrigine().getZ() - s.getCentre().getZ())*r.getDirection().getZ();
 		c = pow((r.getOrigine().getX() - s.getCentre().getX()), 2) + pow((r.getOrigine().getY() - s.getCentre().getY()), 2) + pow((r.getOrigine().getZ() - s.getCentre().getZ()), 2) - pow(s.getRayon(), 2);
-	
+
 		// Calcul du determinant
 		delta = pow(b, 2) - 4.0f*a*c;
 
@@ -61,6 +62,7 @@ void Scene::ecrirePPM(){
 		fichier << ecran.getReso() << " " << ecran.getPixels().size() << endl;
 		fichier << "255" << endl;
 
+		// A modifier quand on aura rempli le tableau de pixels
 		for(unsigned int i = 0; i < ecran.getPixels().size(); i++){
 			for(unsigned int j = 0; j < ecran.getReso(); j++)
 				fichier << getBackground() << endl;
@@ -267,10 +269,7 @@ int main()
 
 	//c.testParsing();
 
-	Rayon r(s.getCam(), Point(97.0f, 90.0f, 60.0f));
-
-
-	cout << s.getIntersection(r) << endl;
+	cout << s.getIntersection(Rayon(s.getCam(), Point(-5, -10, 30.0f))) << endl;
 
 	s.ecrirePPM();
 
