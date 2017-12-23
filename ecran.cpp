@@ -23,16 +23,19 @@ Ecran::Ecran(const int res, const Point tl, const Point tr, const Point bl){
 	bottomLeft = bl;
 
 	// Calcul de la résolution verticale :
-	int resVert = (topLeft.getY() - bottomLeft.getY())*(res/(topRight.getX() - topLeft.getX()));
+	resolutionVerticale = (topLeft.getY() - bottomLeft.getY())*(res/(topRight.getX() - topLeft.getX()));
 
-	pixels.resize(resVert);
-	for(unsigned int i = 0; i < pixels.size(); i++)
-		pixels.at(i).resize(res);
+	pixels = new Couleur*[resolutionVerticale];
+	for(int i = 0; i < resolutionVerticale; ++i) pixels[i] = new int[resolution];
 
 }
 
 // Je pensais qu'on aurait besoin à cause du resize() de "pixels", mais 
 // valgrind dit que tout va bien
 Ecran::~Ecran(){
+
+	for(int i = 0; i < resolutionVerticale; ++i) delete pixels[i]; 
+	delete pixels;
+
 	
 }
