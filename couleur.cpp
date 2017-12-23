@@ -23,5 +23,5 @@ void Couleur::calculerCouleur(const int e, const float angle, const Couleur ci, 
 
 void Couleur::afficher(std::ostream &flux) const
 {
-	flux << " R:" << r << " G :" << g << " B:" << b << endl;
+	flux <<  r << " " << g << " " << b << endl;
 }

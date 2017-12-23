@@ -36,13 +36,17 @@ Rayon Scene::genererRayon(Point p){
 
 
 void Scene::ecrirePPM(){
-
 	try{
-		ofstream fichier("image.txt", ios::out | ios::trunc);
+		ofstream fichier("image.ppm", ios::out | ios::trunc);
 
 		fichier << "P3" << endl;
-		fichier << ecran.getReso() << " " << ecran.getReso() << endl;
+		fichier << ecran.getReso() << " " << ecran.getPixels().size() << endl;
 		fichier << "255" << endl;
+
+		for(unsigned int i = 0; i < ecran.getPixels().size(); i++){
+			for(unsigned int j = 0; j < ecran.getReso(); i++)
+				fichier << getBackground() << endl;
+		}
 
 		fichier.close();
 	} catch(exception const& e){

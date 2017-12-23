@@ -12,7 +12,6 @@ void Ecran::afficher(std::ostream &flux) const
     topRight << "posBL" << bottomLeft << "resolution : " << resolution << "\n\n" << std::endl;
 }
 
-
 Ecran::Ecran(){
 	
 }
