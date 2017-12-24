@@ -8,8 +8,10 @@ private:
 	Couleur coul;
 
 public:
+	PointColore();
 	PointColore(const float x, const float y, const float z, const Couleur c) : Point(x, y, z), coul(c){}
 	Couleur getCouleur() const {return coul;}
+	bool estEgal(PointColore p);
 };
 
 #endif

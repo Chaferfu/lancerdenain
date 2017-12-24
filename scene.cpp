@@ -8,7 +8,6 @@
 #include "rayon.hpp"
 #include "sphere.hpp"
 #include "ecran.hpp"
-#include "source.hpp"
 #include "scene.hpp"
 using namespace std;
 
@@ -16,7 +15,7 @@ Scene::Scene(){
 	
 }
 
-Scene::Scene(const Point c,const  Ecran& e,const Source s,const Couleur coul,const vector<Sphere> v){
+Scene::Scene(const Point c,const  Ecran& e,const PointColore s,const Couleur coul,const vector<Sphere> v){
 	camera = c;
 	ecran = e;
 	source = s;
@@ -88,11 +87,18 @@ void Scene::ecrirePPM(){
 	cout << "jveux pas mourir" << endl;
 }
 
+bool Scene::estVisible(PointColore p){
+	if(getIntersection(Rayon(p, source)).estEgal(source))
+		return true;
+	return false;
+}
+
 void Scene::rayTracing(){
+	PointColore pc;
 	for(unsigned int i = 0; i < ecran.getResolutionVerticale(); i++){
 			for(unsigned int j = 0; j < ecran.getReso(); j++){
-				//cout << getIntersection(Rayon(getCam(), Point(-5, -10, 30.0f))).getCouleur() << endl;
-				getEcran().getPixels()[i][j] = getIntersection(Rayon(getCam(), Point(i*10+j, i*10+j, 30.0f))).getCouleur();
+				pc = getIntersection(Rayon(getCam(), getEcran().getPixel(i*getEcran().getReso()+j))).getCouleur();
+				getEcran().getPixels()[i][j] = calculerCouleur(estVisible(pc), /*inserer le calcul d'angle*/ , pc.getCouleur(), source.getCouleur());
 			}
 	}
 }
@@ -193,7 +199,7 @@ Scene parse()
 		cout << "hmmm ça bug 7" << endl;
 	}
 
-	Source s = Source(Point(x,y,z), Couleur(r,g,b));
+	PointColore s = PointColore(x,y,z, Couleur(r, g, b));
 
 	passerBlancs(stream);
 	passerCommentaires(stream);
@@ -266,7 +272,7 @@ ostream& operator<<( ostream &flux, Point const& p )
     return flux;
 }
 
-ostream& operator<<( std::ostream &flux,const Source & s )
+ostream& operator<<( std::ostream &flux,const PointColore & s )
 {
 	s.afficher(flux);
 	return flux;
@@ -284,6 +290,10 @@ ostream& operator<<( std::ostream &flux,const Sphere & s )
 	return flux;
 }
 
+/*bool operator==(PointColore const& a, PointColore const& b){
+    return a.estEgal(b);
+}*/
+
 void testOpPoints()
 {
 	Point p(1,2,3);
@@ -300,19 +310,19 @@ int main()
 {
 
 
-	testOpPoints();
+	//testOpPoints();
 	Scene s = parse();
 	/*cout << s.getCam() << endl;
 	cout << s.getEcran() << endl;
 	cout << "back :" << s.getBac*/
 
 	//c.testParsing();
-	cout << "ne me detruit pas     resVer" << s.getEcran().getResolutionVerticale() << "res hor" <<  s.getEcran().getReso() << endl;
+	//cout << "ne me detruit pas     resVer" << s.getEcran().getResolutionVerticale() << "res hor" <<  s.getEcran().getReso() << endl;
 
-	cout << s.getEcran().getPixel(5) << endl;
+	/*cout << s.getEcran().getPixel(5) << endl;
 	cout << s.getEcran().getPixel(1) << endl;
 	cout << s.getEcran().getPixel(2) << endl;
-	cout << s.getEcran().getPixel(3) << endl;
+	cout << s.getEcran().getPixel(3) << endl;*/
 
 
 	s.rayTracing();
@@ -322,6 +332,8 @@ int main()
 	//cout << s.getIntersection(Rayon(s.getCam(), Point(-5.0f, -5.0f, 30.0f))) << endl;
 
 	s.ecrirePPM();
+
+
 
 	return 0;
 }

@@ -2,6 +2,6 @@
 
 Rayon::Rayon(const Point origine, const Point dir){
 	this->origine = origine;
-	this->direction = dir;
+	this->direction = dir - origine;
 }
 

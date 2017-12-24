@@ -21,7 +21,11 @@ void Couleur::calculerCouleur(const int e, const float angle, const Couleur ci, 
 	b = e*cos(angle)*ci.getB()*cs.getB()/255;
 }
 
-void Couleur::afficher(std::ostream &flux) const
-{
+void Couleur::afficher(std::ostream &flux) const{
 	flux <<  r << " " << g << " " << b << endl;
 }
+
+bool Couleur::estEgal(Couleur c){
+	return r == c.r && g == c.g && b == c.b;
+}
+
