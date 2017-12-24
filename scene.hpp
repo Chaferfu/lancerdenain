@@ -27,6 +27,7 @@ public:
 	Ecran getEcran() const {return ecran;}
 	PointColore getSource() const {return source;}
 	std::vector<Sphere> getSpheres() const {return spheres;}
+	int getId() const {return idCourant;}
 	void setCam(const Point cam) {camera = cam;}
 	void setEcran(const Ecran& ecran) {this->ecran = ecran;}
 	void addSphere(const Sphere s);

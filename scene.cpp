@@ -34,7 +34,7 @@ float Scene::calculerAngle(PointColore p){
 	float produit = vNormale.scalaire(vRayon);
 	//cout << acos(produit/(vNormale.norme()*vRayon.norme())) << endl;
 
-	float angle = M_PI/2 - acos(produit/(vNormale.norme()*vRayon.norme()));
+	float angle = acos(produit/(vNormale.norme()*vRayon.norme()));
 
 	//cout << angle << endl;
 
@@ -69,6 +69,7 @@ PointColore Scene::getIntersection(Rayon r){
 				t = -b/(2*a);
 				coul = s.getCouleur();
 				idCourant = i;
+				cout << "j'ai touche " << i << endl;
 			}
 		}
 		//else if(delta > 0.0f) t = min(min((-b-sqrt(delta))/(2*a), (-b+sqrt(delta))/(2*a)), t);
@@ -77,6 +78,7 @@ PointColore Scene::getIntersection(Rayon r){
 				t = min((-b-sqrt(delta))/(2*a), (-b+sqrt(delta))/(2*a));
 				coul = s.getCouleur();
 				idCourant = i;
+				cout << "j'ai touche " << i << endl;
 			}
 		}
 
@@ -109,8 +111,9 @@ void Scene::ecrirePPM(){
 }
 
 bool Scene::estVisible(PointColore p){
-	getIntersection(Rayon(p, source));
-	if(idCourant == -1){
+	PointColore p2 = getIntersection(Rayon(p, source));
+	cout << "intersection : " << p2 << endl;
+	if(idCourant == -1 || ((Point)p2).distance((Point)source) > ((Point)p).distance((Point)source)){
 		cout << "visible" << endl;
 		return true;
 	}
@@ -353,11 +356,16 @@ int main()
 	cout << s.getEcran().getPixel(3) << endl;*/
 
 
+	
 	s.rayTracing();
 
 	//cout << s.getIntersection(r) << "salut" <<endl;
 
-	//cout << s.getIntersection(Rayon(s.getCam(), Point(-5.0f, -5.0f, 30.0f))) << endl;
+	/*PointColore pc =  s.getIntersection(Rayon(s.getCam(), Point(95.0f, 96.0f, 30.0f)));
+
+	cout << pc << endl;
+	cout << s.getId() << endl;
+	cout << s.estVisible(pc) << endl;*/
 
 	s.ecrirePPM();
 
