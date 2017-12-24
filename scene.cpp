@@ -32,25 +32,38 @@ void Scene::addSphere(const Sphere s){
  * proche de la caméra s'il existe, un point aux coordonnées infinies 
  * sinon.
  */
-Point Scene::getIntersection(Rayon r){
+PointColore Scene::getIntersection(Rayon r){
 	float a, b, c; // Coefficients du polynome d'ordre 2
 	float delta, t = numeric_limits<float>::infinity();
+	Couleur coul = getBackground();
 
 	for(Sphere s : spheres){
 		// Calcul des coefficients du polynome
 		a = pow(r.getDirection().getX(), 2) + pow(r.getDirection().getY(), 2) + pow(r.getDirection().getZ(), 2);
 		b = 2.0f*(r.getOrigine().getX() - s.getCentre().getX())*r.getDirection().getX() + 2.0f*(r.getOrigine().getY() - s.getCentre().getY())*r.getDirection().getY() + 2.0f*(r.getOrigine().getZ() - s.getCentre().getZ())*r.getDirection().getZ();
 		c = pow((r.getOrigine().getX() - s.getCentre().getX()), 2) + pow((r.getOrigine().getY() - s.getCentre().getY()), 2) + pow((r.getOrigine().getZ() - s.getCentre().getZ()), 2) - pow(s.getRayon(), 2);
-	
+
 		// Calcul du determinant
 		delta = pow(b, 2) - 4.0f*a*c;
 
 		//Calcul des racines
-		if(delta == 0.0f) t = min(-b/(2*a), t);
-		else if(delta > 0.0f) t = min(min((-b-sqrt(delta))/(2*a), (-b+sqrt(delta))/(2*a)), t);
+		//if(delta == 0.0f) t = min(-b/(2*a), t);
+		if(delta == 0.0f){
+			if(t > -b/(2*a)){
+				t = -b/(2*a);
+				coul = s.getCouleur();
+			}
+		}
+		//else if(delta > 0.0f) t = min(min((-b-sqrt(delta))/(2*a), (-b+sqrt(delta))/(2*a)), t);
+		else if(delta > 0.0f){
+			if(t > min((-b-sqrt(delta))/(2*a), (-b+sqrt(delta))/(2*a))){
+				t = min((-b-sqrt(delta))/(2*a), (-b+sqrt(delta))/(2*a));
+				coul = s.getCouleur();
+			}
+		}
 	}
 
-	return Point(r.getOrigine().getX() + t*r.getDirection().getX(), r.getOrigine().getY() + t*r.getDirection().getY(), r.getOrigine().getZ() + t*r.getDirection().getZ());
+	return PointColore(r.getOrigine().getX() + t*r.getDirection().getX(), r.getOrigine().getY() + t*r.getDirection().getY(), r.getOrigine().getZ() + t*r.getDirection().getZ(), coul);
 }
 
 void Scene::ecrirePPM(){
@@ -61,9 +74,10 @@ void Scene::ecrirePPM(){
 		fichier << ecran.getReso() << " " << ecran.getResolutionVerticale() << endl;
 		fichier << "255" << endl;
 
+		// A modifier quand on aura rempli le tableau de pixels
 		for(unsigned int i = 0; i < ecran.getResolutionVerticale(); i++){
 			for(unsigned int j = 0; j < ecran.getReso(); j++)
-				fichier << getBackground() << endl;
+				fichier << getEcran().getPixels()[i][j] << endl;
 		}
 
 		fichier.close();
@@ -72,6 +86,15 @@ void Scene::ecrirePPM(){
 	}
 
 	cout << "jveux pas mourir" << endl;
+}
+
+void Scene::rayTracing(){
+	for(unsigned int i = 0; i < ecran.getResolutionVerticale(); i++){
+			for(unsigned int j = 0; j < ecran.getReso(); j++){
+				//cout << getIntersection(Rayon(getCam(), Point(-5, -10, 30.0f))).getCouleur() << endl;
+				getEcran().getPixels()[i][j] = getIntersection(Rayon(getCam(), Point(i*10+j, i*10+j, 30.0f))).getCouleur();
+			}
+	}
 }
 
 Scene parse()
@@ -204,6 +227,7 @@ Scene parse()
 	cout << "parse : je n'ai plus peur de la mort" << endl;
 
 	//TODO fermer le fichier
+	stream.close();
 	return Scene(cam, e, s, bg, v);
 }
 
@@ -272,10 +296,11 @@ int main()
 	//c.testParsing();
 	cout << "ne me detruit pas" << endl;
 
-	Rayon r(s.getCam(), Point(97.0f, 90.0f, 60.0f));
-
+	s.rayTracing();
 
 	cout << s.getIntersection(r) << "salut" <<endl;
+
+	//cout << s.getIntersection(Rayon(s.getCam(), Point(-5.0f, -5.0f, 30.0f))) << endl;
 
 	s.ecrirePPM();
 

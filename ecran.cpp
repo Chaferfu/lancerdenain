@@ -30,9 +30,8 @@ Ecran::Ecran(const int res, const Point tl, const Point tr, const Point bl){
 
 }
 
-// Je pensais qu'on aurait besoin à cause du resize() de "pixels", mais 
-// valgrind dit que tout va bien
-Ecran::~Ecran(){
+Ecran::~Ecran()
+{
 
 	cout << "reso h " << resolution << "  reso v " << resolutionVerticale << endl;
 	

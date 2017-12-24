@@ -8,6 +8,7 @@
 #include "ecran.hpp"
 #include "source.hpp"
 #include "rayon.hpp"
+#include "pointcolore.hpp"
 
 class Scene {
 private:
@@ -29,7 +30,8 @@ public:
 	void setEcran(const Ecran& ecran) {this->ecran = ecran;}
 	void addSphere(const Sphere s);
 	void ecrirePPM();
-	Point getIntersection(Rayon r);
+	PointColore getIntersection(Rayon r);
+	void rayTracing();
 };
 
 Scene parse();

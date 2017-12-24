@@ -3,7 +3,7 @@
 #include <iostream>
 
 class Point{
-private:
+protected:
 	float x, y, z;
 
 public:
