@@ -16,7 +16,7 @@ Scene::Scene(){
 	
 }
 
-Scene::Scene(Point c, Ecran e, Source s, Couleur coul, vector<Sphere> v){
+Scene::Scene(const Point c,const  Ecran& e,const Source s,const Couleur coul,const vector<Sphere> v){
 	camera = c;
 	ecran = e;
 	source = s;
@@ -70,6 +70,8 @@ void Scene::ecrirePPM(){
 	} catch(exception const& e){
 		cerr << "Erreur : " << e.what() << endl;
 	}
+
+	cout << "jveux pas mourir" << endl;
 }
 
 Scene parse()
@@ -199,6 +201,8 @@ Scene parse()
 
 	}
 
+	cout << "parse : je n'ai plus peur de la mort" << endl;
+
 	//TODO fermer le fichier
 	return Scene(cam, e, s, bg, v);
 }
@@ -266,11 +270,12 @@ int main()
 	cout << "back :" << s.getBac*/
 
 	//c.testParsing();
+	cout << "ne me detruit pas" << endl;
 
 	Rayon r(s.getCam(), Point(97.0f, 90.0f, 60.0f));
 
 
-	cout << s.getIntersection(r) << endl;
+	cout << s.getIntersection(r) << "salut" <<endl;
 
 	s.ecrirePPM();
 

@@ -34,8 +34,28 @@ Ecran::Ecran(const int res, const Point tl, const Point tr, const Point bl){
 // valgrind dit que tout va bien
 Ecran::~Ecran(){
 
-	for(unsigned int i = 0; i < resolutionVerticale; ++i) delete pixels[i]; 
-	delete pixels;
+	cout << "reso h " << resolution << "  reso v " << resolutionVerticale << endl;
+	
+	for(unsigned int i = 0; i < resolutionVerticale; ++i)
+	{
+		cout << "je delete  " << i << " " << this << endl;
+		delete[] pixels[i]; 
+	} 
+	cout << "je delete le dernier" << endl;
+	delete[] pixels;
 
 	
+}
+
+Point Ecran::getPixel(const unsigned int i)
+{
+	
+
+	if(i>resolution*resolutionVerticale-1)
+	{
+		cout << "ce pixel n'existe pas" << endl;
+	}
+	//TODO
+	Point p;
+	return p;
 }

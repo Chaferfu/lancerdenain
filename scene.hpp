@@ -20,13 +20,13 @@ private:
 public:
 	Couleur getBackground() const {return background;};
 	Scene();
-	Scene(const Point c, const Ecran e, const Source s, Couleur bg, std::vector<Sphere> v);
+	Scene(const Point c, const Ecran& e, const Source s, Couleur bg, std::vector<Sphere> v);
 	Point getCam() const {return camera;}
 	Ecran getEcran() const {return ecran;}
 	Source getSource() const {return source;}
 	std::vector<Sphere> getSpheres() const {return spheres;}
 	void setCam(const Point cam) {camera = cam;}
-	void setEcran(const Ecran ecran) {this->ecran = ecran;}
+	void setEcran(const Ecran& ecran) {this->ecran = ecran;}
 	void addSphere(const Sphere s);
 	void ecrirePPM();
 	Point getIntersection(Rayon r);
