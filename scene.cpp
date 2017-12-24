@@ -284,21 +284,40 @@ ostream& operator<<( std::ostream &flux,const Sphere & s )
 	return flux;
 }
 
+void testOpPoints()
+{
+	Point p(1,2,3);
+	Point p2(2,3,4);
 
+	Point p3 = p + p2;
+	cout << p3 << endl;
+	p3 *= 2;
+	cout << p3 << endl;
+
+}
 
 int main()
 {
+
+
+	testOpPoints();
 	Scene s = parse();
 	/*cout << s.getCam() << endl;
 	cout << s.getEcran() << endl;
 	cout << "back :" << s.getBac*/
 
 	//c.testParsing();
-	cout << "ne me detruit pas" << endl;
+	cout << "ne me detruit pas     resVer" << s.getEcran().getResolutionVerticale() << "res hor" <<  s.getEcran().getReso() << endl;
+
+	cout << s.getEcran().getPixel(5) << endl;
+	cout << s.getEcran().getPixel(1) << endl;
+	cout << s.getEcran().getPixel(2) << endl;
+	cout << s.getEcran().getPixel(3) << endl;
+
 
 	s.rayTracing();
 
-	cout << s.getIntersection(r) << "salut" <<endl;
+	//cout << s.getIntersection(r) << "salut" <<endl;
 
 	//cout << s.getIntersection(Rayon(s.getCam(), Point(-5.0f, -5.0f, 30.0f))) << endl;
 

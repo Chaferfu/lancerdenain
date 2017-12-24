@@ -32,7 +32,7 @@ Ecran::Ecran(const int res, const Point tl, const Point tr, const Point bl){
 
 Ecran::~Ecran()
 {
-
+	/*
 	cout << "reso h " << resolution << "  reso v " << resolutionVerticale << endl;
 	
 	for(unsigned int i = 0; i < resolutionVerticale; ++i)
@@ -42,19 +42,25 @@ Ecran::~Ecran()
 	} 
 	cout << "je delete le dernier" << endl;
 	delete[] pixels;
-
+	*/
 	
 }
 
 Point Ecran::getPixel(const unsigned int i)
 {
 	
-
 	if(i>resolution*resolutionVerticale-1)
 	{
 		cout << "ce pixel n'existe pas" << endl;
 	}
 	//TODO
-	Point p;
+	float ligne = i/resolution;
+	float colonne = i%resolution;
+
+	Point vectUnitaireHorizontal = (topRight - topLeft)/resolution;
+	Point vectUnitaireVertical = (bottomLeft - topLeft)/resolutionVerticale;
+
+	Point p(topLeft + vectUnitaireVertical*ligne + vectUnitaireHorizontal*colonne); //on pourrait ajouter la moitie de la taille d'un pixel pour passer pile au centre mais au final c'est pas tres important
+
 	return p;
 }

@@ -19,6 +19,73 @@ public:
 	float distance(const Point other) const;
 
 
+	Point& operator+=(const Point& rhs) 
+	{                           
+		x += rhs.x;
+		y += rhs.y;
+		z += rhs.z;	
+		return *this;
+	}
+	 
+	// friends defined inside class body are inline and are hidden from non-ADL lookup
+	friend Point operator+(Point lhs,        // passing lhs by value helps optimize chained a+b+c
+	                   const Point& rhs) // otherwise, both parameters may be const references
+	{
+	  lhs += rhs; // reuse compound assignment
+	  return lhs; // return the result by value (uses move constructor)
+	}
+
+	Point& operator-=(const Point& rhs) 
+	{                           
+		x -= rhs.x;
+		y -= rhs.y;
+		z -= rhs.z;	
+		return *this;
+	}
+	 
+	// friends defined inside class body are inline and are hidden from non-ADL lookup
+	friend Point operator-(Point lhs,        // passing lhs by value helps optimize chained a+b+c
+	                   const Point& rhs) // otherwise, both parameters may be const references
+	{
+	  lhs -= rhs; // reuse compound assignment
+	  return lhs; // return the result by value (uses move constructor)
+	}
+
+	Point& operator*=(const float f) 
+	{                           
+		x *= f;
+		y *= f;
+		z *= f;	
+		return *this;
+	}
+	 
+	// friends defined inside class body are inline and are hidden from non-ADL lookup
+	friend Point operator*(Point lhs,        // passing lhs by value helps optimize chained a+b+c
+	                   const float f) // otherwise, both parameters may be const references
+	{
+	  lhs *= f; // reuse compound assignment
+	  return lhs; // return the result by value (uses move constructor)
+
+	}
+
+
+	Point& operator/=(const float f) 
+	{                           
+		x /= f;
+		y /= f;
+		z /= f;	
+		return *this;
+	}
+	 
+	// friends defined inside class body are inline and are hidden from non-ADL lookup
+	friend Point operator/(Point lhs,        // passing lhs by value helps optimize chained a+b+c
+	                   const float f) // otherwise, both parameters may be const references
+	{
+	  lhs /= f; // reuse compound assignment
+	  return lhs; // return the result by value (uses move constructor)
+
+	}
+
 };
 
 #endif
