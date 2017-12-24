@@ -27,3 +27,11 @@ float Point::distance(const Point other) const
 
 	return sqrt(xx*xx + yy*yy + zz*zz);
 }
+
+float Point::norme(){
+	return sqrt(x*x + y*y + z*z);
+}
+
+float Point::scalaire(const Point other){
+	return x*other.x + y*other.y + z*other.z;
+}

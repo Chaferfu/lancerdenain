@@ -15,10 +15,12 @@ Couleur::Couleur(const unsigned char r, const unsigned char g, const unsigned ch
 
 }
 
-void Couleur::calculerCouleur(const int e, const float angle, const Couleur ci, const Couleur cs){
-	r = e*cos(angle)*ci.getR()*cs.getR()/255;
-	g = e*cos(angle)*ci.getG()*cs.getG()/255;
-	b = e*cos(angle)*ci.getB()*cs.getB()/255;
+void Couleur::calculerCouleur(const int e, const float angle, Couleur ci, Couleur cs){
+	//if(e == 1)
+		//cout << e << " " << angle << " couleurs :" << (int)ci.getR() << " " << (int)cs.getR() << endl;
+	r = e*cos(angle)*((int)ci.getR()*(int)cs.getR())/255; //if(e==1) cout << "angle : " << angle << " r : " << r << " autre r : " << (int)ci.getR() << endl;
+	g = e*cos(angle)*((int)ci.getG()*(int)cs.getG())/255;
+	b = e*cos(angle)*((int)ci.getB()*(int)cs.getB())/255;
 }
 
 void Couleur::afficher(std::ostream &flux) const{

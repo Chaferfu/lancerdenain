@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
+#include <math.h>
 #include "sphere.hpp"
 #include "ecran.hpp"
 #include "rayon.hpp"
@@ -12,6 +13,7 @@
 class Scene {
 private:
 	std::vector<Sphere> spheres;
+	int idCourant; // Position dans le vecteur de la sphère sur laquelle on travaille
 	Point camera;
 	Ecran ecran;
 	PointColore source;
@@ -28,6 +30,7 @@ public:
 	void setCam(const Point cam) {camera = cam;}
 	void setEcran(const Ecran& ecran) {this->ecran = ecran;}
 	void addSphere(const Sphere s);
+	float calculerAngle(PointColore p);
 	void ecrirePPM();
 	bool estVisible(PointColore p);
 	PointColore getIntersection(Rayon r);

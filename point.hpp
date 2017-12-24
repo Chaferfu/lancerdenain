@@ -17,6 +17,8 @@ public:
 	void setZ(const float z) {this->z = z;}
 	void afficher(std::ostream &flux) const;	
 	float distance(const Point other) const;
+	float scalaire(const Point other);
+	float norme();
 
 
 	Point& operator+=(const Point& rhs) 

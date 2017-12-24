@@ -27,6 +27,20 @@ void Scene::addSphere(const Sphere s){
 	spheres.push_back(s);
 }
 
+float Scene::calculerAngle(PointColore p){
+	Point vNormale = spheres.at(idCourant).getCentre() - p;
+	Point vRayon = source - p;
+
+	float produit = vNormale.scalaire(vRayon);
+	//cout << acos(produit/(vNormale.norme()*vRayon.norme())) << endl;
+
+	float angle = M_PI/2 - acos(produit/(vNormale.norme()*vRayon.norme()));
+
+	//cout << angle << endl;
+
+	return angle;
+}
+
 /* Renvoie le point d'intersection entre un rayon et l'objet le plus 
  * proche de la caméra s'il existe, un point aux coordonnées infinies 
  * sinon.
@@ -35,6 +49,9 @@ PointColore Scene::getIntersection(Rayon r){
 	float a, b, c; // Coefficients du polynome d'ordre 2
 	float delta, t = numeric_limits<float>::infinity();
 	Couleur coul = getBackground();
+	int i = 0;
+
+	idCourant = -1;
 
 	for(Sphere s : spheres){
 		// Calcul des coefficients du polynome
@@ -51,6 +68,7 @@ PointColore Scene::getIntersection(Rayon r){
 			if(t > -b/(2*a)){
 				t = -b/(2*a);
 				coul = s.getCouleur();
+				idCourant = i;
 			}
 		}
 		//else if(delta > 0.0f) t = min(min((-b-sqrt(delta))/(2*a), (-b+sqrt(delta))/(2*a)), t);
@@ -58,8 +76,11 @@ PointColore Scene::getIntersection(Rayon r){
 			if(t > min((-b-sqrt(delta))/(2*a), (-b+sqrt(delta))/(2*a))){
 				t = min((-b-sqrt(delta))/(2*a), (-b+sqrt(delta))/(2*a));
 				coul = s.getCouleur();
+				idCourant = i;
 			}
 		}
+
+		i++;
 	}
 
 	return PointColore(r.getOrigine().getX() + t*r.getDirection().getX(), r.getOrigine().getY() + t*r.getDirection().getY(), r.getOrigine().getZ() + t*r.getDirection().getZ(), coul);
@@ -88,8 +109,11 @@ void Scene::ecrirePPM(){
 }
 
 bool Scene::estVisible(PointColore p){
-	if(getIntersection(Rayon(p, source)).estEgal(source))
+	getIntersection(Rayon(p, source));
+	if(idCourant == -1){
+		cout << "visible" << endl;
 		return true;
+	}
 	return false;
 }
 
@@ -97,8 +121,13 @@ void Scene::rayTracing(){
 	PointColore pc;
 	for(unsigned int i = 0; i < ecran.getResolutionVerticale(); i++){
 			for(unsigned int j = 0; j < ecran.getReso(); j++){
-				pc = getIntersection(Rayon(getCam(), getEcran().getPixel(i*getEcran().getReso()+j))).getCouleur();
-				getEcran().getPixels()[i][j] = calculerCouleur(estVisible(pc), /*inserer le calcul d'angle*/ , pc.getCouleur(), source.getCouleur());
+				pc = getIntersection(Rayon(getCam(), getEcran().getPixel(i*getEcran().getReso()+j)));
+				if(idCourant != -1){ // Si le rayon a touché un objet
+					cout << "touche" << endl;
+					getEcran().getPixels()[i][j].calculerCouleur(estVisible(pc), calculerAngle(pc) , pc.getCouleur(), source.getCouleur());
+				}
+				else
+					getEcran().getPixels()[i][j] = getBackground();
 			}
 	}
 }
@@ -308,7 +337,6 @@ void testOpPoints()
 
 int main()
 {
-
 
 	//testOpPoints();
 	Scene s = parse();

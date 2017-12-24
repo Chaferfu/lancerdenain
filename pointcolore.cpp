@@ -13,7 +13,7 @@ PointColore::PointColore(){
 }
 
 bool PointColore::estEgal(PointColore p){
-	return x == p.x && y == p.y && z == p.z && coul.estEgal(p.coul); 
+	return x == p.x && y == p.y && z == p.z; 
 }
 
 /*
