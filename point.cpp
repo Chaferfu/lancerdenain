@@ -4,7 +4,7 @@
 
 
 Point::Point(){
-	x= 40;
+	//x= 40;
 }
 
 Point::Point(const float x, const float y, const float z){

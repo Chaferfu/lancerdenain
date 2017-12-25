@@ -5,15 +5,10 @@
 #include <sstream>
 #include "couleur.hpp"
 #include "point.hpp"
-#include "rayon.hpp"
-#include "sphere.hpp"
-#include "ecran.hpp"
 #include "scene.hpp"
 using namespace std;
 
-Scene::Scene(){
-	
-}
+Scene::Scene(){}
 
 Scene::Scene(const Point c,const  Ecran& e,const PointColore s,const Couleur coul,const vector<Sphere> v){
 	camera = c;
@@ -32,13 +27,8 @@ float Scene::calculerAngle(PointColore p){
 	Point vRayon = source - p;
 
 	float produit = vNormale.scalaire(vRayon);
-	//cout << acos(produit/(vNormale.norme()*vRayon.norme())) << endl;
 
-	float angle = acos(produit/(vNormale.norme()*vRayon.norme()));
-
-	//cout << angle << endl;
-
-	return angle;
+	return acos(produit/(vNormale.norme()*vRayon.norme())) - M_PI;
 }
 
 /* Renvoie le point d'intersection entre un rayon et l'objet le plus 
@@ -59,27 +49,14 @@ PointColore Scene::getIntersection(Rayon r){
 		b = 2.0f*(r.getOrigine().getX() - s.getCentre().getX())*r.getDirection().getX() + 2.0f*(r.getOrigine().getY() - s.getCentre().getY())*r.getDirection().getY() + 2.0f*(r.getOrigine().getZ() - s.getCentre().getZ())*r.getDirection().getZ();
 		c = pow((r.getOrigine().getX() - s.getCentre().getX()), 2) + pow((r.getOrigine().getY() - s.getCentre().getY()), 2) + pow((r.getOrigine().getZ() - s.getCentre().getZ()), 2) - pow(s.getRayon(), 2);
 
-		// Calcul du determinant
+		// Calcul du discriminant
 		delta = pow(b, 2) - 4.0f*a*c;
 
 		//Calcul des racines
-		//if(delta == 0.0f) t = min(-b/(2*a), t);
-		if(delta == 0.0f){
-			if(t > -b/(2*a)){
-				t = -b/(2*a);
-				coul = s.getCouleur();
-				idCourant = i;
-				cout << "j'ai touche " << i << endl;
-			}
-		}
-		//else if(delta > 0.0f) t = min(min((-b-sqrt(delta))/(2*a), (-b+sqrt(delta))/(2*a)), t);
-		else if(delta > 0.0f){
-			if(t > min((-b-sqrt(delta))/(2*a), (-b+sqrt(delta))/(2*a))){
-				t = min((-b-sqrt(delta))/(2*a), (-b+sqrt(delta))/(2*a));
-				coul = s.getCouleur();
-				idCourant = i;
-				cout << "j'ai touche " << i << endl;
-			}
+		if(delta >= 0.0f && t > min((-b-sqrt(delta))/(2*a), (-b+sqrt(delta))/(2*a))){
+			t = min((-b-sqrt(delta))/(2*a), (-b+sqrt(delta))/(2*a));
+			coul = s.getCouleur();
+			idCourant = i;
 		}
 
 		i++;
@@ -110,13 +87,13 @@ void Scene::ecrirePPM(){
 	cout << "jveux pas mourir" << endl;
 }
 
+/* Renvoie vrai si le point passe en parametre recoit la lumiere de la 
+ * source, faux sinon.
+ */
 bool Scene::estVisible(PointColore p){
-	PointColore p2 = getIntersection(Rayon(p, source));
-	cout << "intersection : " << p2 << endl;
-	if(idCourant == -1 || ((Point)p2).distance((Point)source) > ((Point)p).distance((Point)source)){
-		cout << "visible" << endl;
+	PointColore p2 = getIntersection(Rayon(source, p));
+	if(idCourant == -1 || ((Point)p2).distance((Point)source) - ((Point)p).distance((Point)source) < 0.01f )
 		return true;
-	}
 	return false;
 }
 
@@ -125,20 +102,16 @@ void Scene::rayTracing(){
 	for(unsigned int i = 0; i < ecran.getResolutionVerticale(); i++){
 			for(unsigned int j = 0; j < ecran.getReso(); j++){
 				pc = getIntersection(Rayon(getCam(), getEcran().getPixel(i*getEcran().getReso()+j)));
-				if(idCourant != -1){ // Si le rayon a touché un objet
-					cout << "touche" << endl;
+				if(idCourant != -1) // Si le rayon a touché un objet
 					getEcran().getPixels()[i][j].calculerCouleur(estVisible(pc), calculerAngle(pc) , pc.getCouleur(), source.getCouleur());
-				}
 				else
 					getEcran().getPixels()[i][j] = getBackground();
 			}
 	}
 }
 
-Scene parse()
-{
-
-	ifstream stream("In.txt", ifstream::in);
+Scene parse(){
+	ifstream stream("In2.txt", ifstream::in);
 	//char line[1000];
 	string str;
 
@@ -152,8 +125,7 @@ Scene parse()
 
 	getline(stream, str);
 	istringstream iss(str);
-	if(!(iss >> x >> y >> z))
-	{
+	if(!(iss >> x >> y >> z)){
 		cout << "hmmm ça bug 1" << endl;
 	}
 	
@@ -322,10 +294,6 @@ ostream& operator<<( std::ostream &flux,const Sphere & s )
 	return flux;
 }
 
-/*bool operator==(PointColore const& a, PointColore const& b){
-    return a.estEgal(b);
-}*/
-
 void testOpPoints()
 {
 	Point p(1,2,3);
@@ -340,7 +308,6 @@ void testOpPoints()
 
 int main()
 {
-
 	//testOpPoints();
 	Scene s = parse();
 	/*cout << s.getCam() << endl;
@@ -354,22 +321,10 @@ int main()
 	cout << s.getEcran().getPixel(1) << endl;
 	cout << s.getEcran().getPixel(2) << endl;
 	cout << s.getEcran().getPixel(3) << endl;*/
-
-
 	
 	s.rayTracing();
 
-	//cout << s.getIntersection(r) << "salut" <<endl;
-
-	/*PointColore pc =  s.getIntersection(Rayon(s.getCam(), Point(95.0f, 96.0f, 30.0f)));
-
-	cout << pc << endl;
-	cout << s.getId() << endl;
-	cout << s.estVisible(pc) << endl;*/
-
 	s.ecrirePPM();
-
-
 
 	return 0;
 }
