@@ -91,8 +91,9 @@ void Scene::ecrirePPM(){
  * source, faux sinon.
  */
 bool Scene::estVisible(PointColore p){
+	int prec = idCourant;
 	PointColore p2 = getIntersection(Rayon(source, p));
-	if(idCourant == -1 || ((Point)p2).distance((Point)source) - ((Point)p).distance((Point)source) < 0.01f )
+	if(idCourant == -1 || (((Point)p2).distance((Point)source) - ((Point)p).distance((Point)source) < 0.005f && idCourant == prec))
 		return true;
 	return false;
 }
@@ -111,7 +112,7 @@ void Scene::rayTracing(){
 }
 
 Scene parse(){
-	ifstream stream("In2.txt", ifstream::in);
+	ifstream stream("In.txt", ifstream::in);
 	//char line[1000];
 	string str;
 
