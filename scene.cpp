@@ -236,8 +236,8 @@ Scene parse(){
 
 	cout << "parse : je n'ai plus peur de la mort" << endl;
 
-	//TODO fermer le fichier
-	stream.close();
+	//TODO fermer le fichier : en fait c'est bon RAII
+	stream.close(); //pas sur que ça soit necessaire ( ça se fait dans le destructeur du stream normalement)
 	return Scene(cam, e, s, bg, v);
 }
 
