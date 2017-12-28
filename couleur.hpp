@@ -15,6 +15,7 @@ public:
 	void setG(const unsigned char g) {this->g = g;}
 	void setB(const unsigned char b) {this->b = b;}
 	void calculerCouleur(const int e, const float angle, Couleur ci, Couleur cs);
+	void calculerCouleurReflexion(const Couleur cr, const float reflx);
 	void afficher(std::ostream &flux) const;
 	bool estEgal(Couleur c);
 };

@@ -23,6 +23,13 @@ void Couleur::calculerCouleur(const int e, const float angle, Couleur ci, Couleu
 	b = e*cos(angle)*((int)ci.getB()*(int)cs.getB())/255;
 }
 
+void Couleur::calculerCouleurReflexion(const Couleur cr, const float reflx)
+{
+	r = (1 - reflx)*r + reflx*cr.getR();
+	g = (1 - reflx)*g + reflx*cr.getG();
+	b = (1 - reflx)*b + reflx*cr.getB();
+}
+
 void Couleur::afficher(std::ostream &flux) const{
 	flux <<  r << " " << g << " " << b << endl;
 }

@@ -123,19 +123,33 @@ bool Scene::estVisible(PointColore p){
 
 void Scene::rayTracing(){
 	PointColore pc;
+	Rayon r;
+	float reflx;
 	for(unsigned int i = 0; i < ecran.getResolutionVerticale(); i++){
 			for(unsigned int j = 0; j < ecran.getReso(); j++){
-				pc = getIntersection(Rayon(getCam(), getEcran().getPixel(i*getEcran().getReso()+j)));
+				r = Rayon(getCam(), getEcran().getPixel(i*getEcran().getReso()+j));
+				pc = getIntersection(r);
 				if(idCourant != -1) // Si le rayon a touché un objet
+				{
 					getEcran().getPixels()[i][j].calculerCouleur(estVisible(pc), calculerAngle(pc) , pc.getCouleur(), source.getCouleur());
+					
+					//reflexion speculaire
+					reflx = spheres.at(idCourant).getReflex();
+					r = rayonReflechi(r);
+					pc = getIntersection(r);
+					ecran.getPixels()[i][j].calculerCouleurReflexion(pc.getCouleur(), reflx);
+
+				}
 				else
+				{
 					getEcran().getPixels()[i][j] = getBackground();
+				}
 			}
 	}
 }
 
 Scene parse(){
-	ifstream stream("In.txt", ifstream::in);
+	ifstream stream("in.txt", ifstream::in);
 	//char line[1000];
 	string str;
 
