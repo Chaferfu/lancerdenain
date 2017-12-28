@@ -31,6 +31,7 @@ float Scene::calculerAngle(PointColore p){
 	return acos(produit/(vNormale.norme()*vRayon.norme())) - M_PI;
 }
 
+
 /* Renvoie le point d'intersection entre un rayon et l'objet le plus 
  * proche de la caméra s'il existe, un point aux coordonnées infinies 
  * sinon.
@@ -64,6 +65,28 @@ PointColore Scene::getIntersection(Rayon r){
 
 	return PointColore(r.getOrigine().getX() + t*r.getDirection().getX(), r.getOrigine().getY() + t*r.getDirection().getY(), r.getOrigine().getZ() + t*r.getDirection().getZ(), coul);
 }
+
+
+/*Renvoie le rayon reflechi sur le premier objet touché 
+ *ou le rayon incident si aucun objet n'est touché
+ */
+Rayon Scene::rayonReflechi(const Rayon incident)
+{
+	Point intersection = getIntersection(incident);
+	if(idCourant != -1)
+	{
+		Rayon normale = spheres.at(idCourant).normale(intersection);
+		Point directionUnitaireIncident = incident.getDirection()/incident.getDirection().norme();
+		Rayon reflechi(intersection, directionUnitaireIncident-2*(directionUnitaireIncident.scalaire(normale.getDirection()))*normale.getDirection());
+		return reflechi;
+	}
+	else
+	{
+		cout << "j'ai pas touché de boule :(" << endl;
+		return incident;
+	}
+}
+
 
 void Scene::ecrirePPM(){
 	try{

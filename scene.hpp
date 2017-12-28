@@ -36,6 +36,7 @@ public:
 	bool estVisible(PointColore p);
 	PointColore getIntersection(Rayon r);
 	void rayTracing();
+	Rayon rayonReflechi(const Rayon incident);
 };
 
 Scene parse();

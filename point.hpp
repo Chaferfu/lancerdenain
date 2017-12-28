@@ -61,13 +61,17 @@ public:
 		return *this;
 	}
 	 
-	// friends defined inside class body are inline and are hidden from non-ADL lookup
-	friend Point operator*(Point lhs,        // passing lhs by value helps optimize chained a+b+c
-	                   const float f) // otherwise, both parameters may be const references
+	
+	friend Point operator*(Point lhs, const float f)
 	{
-	  lhs *= f; // reuse compound assignment
-	  return lhs; // return the result by value (uses move constructor)
+	  lhs *= f; 
+	  return lhs;
+	}
 
+	friend Point operator*(const float f, Point lhs)
+	{
+	  lhs *= f; 
+	  return lhs;
 	}
 
 
