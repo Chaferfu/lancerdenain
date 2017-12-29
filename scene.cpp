@@ -39,7 +39,7 @@ float Scene::calculerAngle(PointColore p){
 PointColore Scene::getIntersection(Rayon r){
 	float a, b, c; // Coefficients du polynome d'ordre 2
 	float delta, t = numeric_limits<float>::infinity();
-	Couleur coul = getBackground();
+	Couleur coul = background;
 	int i = 0;
 
 	idCourant = -1;
@@ -99,7 +99,7 @@ void Scene::ecrirePPM(){
 		// A modifier quand on aura rempli le tableau de pixels
 		for(unsigned int i = 0; i < ecran.getResolutionVerticale(); i++){
 			for(unsigned int j = 0; j < ecran.getReso(); j++)
-				fichier << getEcran().getPixels()[i][j] << endl;
+				fichier << ecran.getPixels()[i][j] << endl;
 		}
 
 		fichier.close();
@@ -125,16 +125,19 @@ void Scene::rayTracing(){
 	PointColore pc;
 	Rayon r;
 	float reflx;
+
+	//#pragma omp parallel for
 	for(unsigned int i = 0; i < ecran.getResolutionVerticale(); i++){
 			for(unsigned int j = 0; j < ecran.getReso(); j++){
-				r = Rayon(getCam(), getEcran().getPixel(i*getEcran().getReso()+j));
+				r = Rayon(camera, ecran.getPixel(i*ecran.getReso()+j));
 				pc = getIntersection(r);
 				if(idCourant != -1) // Si le rayon a touché un objet
-				{
-					getEcran().getPixels()[i][j].calculerCouleur(estVisible(pc), calculerAngle(pc) , pc.getCouleur(), source.getCouleur());
+				{	
+					reflx = spheres.at(idCourant).getReflex();
+					ecran.getPixels()[i][j].calculerCouleur(estVisible(pc), calculerAngle(pc) , pc.getCouleur(), source.getCouleur());
 					
 					//reflexion speculaire
-					reflx = spheres.at(idCourant).getReflex();
+					
 					r = rayonReflechi(r);
 					pc = getIntersection(r);
 					ecran.getPixels()[i][j].calculerCouleurReflexion(pc.getCouleur(), reflx);
@@ -142,15 +145,14 @@ void Scene::rayTracing(){
 				}
 				else
 				{
-					getEcran().getPixels()[i][j] = getBackground();
+					ecran.getPixels()[i][j] = background;
 				}
 			}
 	}
 }
 
 Scene parse(){
-	ifstream stream("in.txt", ifstream::in);
-	//char line[1000];
+	ifstream stream("In.txt", ifstream::in);
 	string str;
 
 	passerCommentaires(stream);
