@@ -5,14 +5,21 @@
 #include <iostream>
 #include <algorithm>
 #include <math.h>
+#include <fstream>
+#include <string.h>			 
+#include <sstream>
 #include "sphere.hpp"
+#include "triangle.hpp"
 #include "ecran.hpp"
 #include "rayon.hpp"
 #include "pointcolore.hpp"
+#include "couleur.hpp"
+#include "point.hpp"
 
 class Scene {
 private:
 	std::vector<Sphere> spheres;
+	std::vector<Triangle> triangles;
 	int idCourant; // Position dans le vecteur de la sphère sur laquelle on travaille
 	Point camera;
 	Ecran ecran;
@@ -20,13 +27,14 @@ private:
 	Couleur background;
 
 public:
-	Couleur getBackground() const {return background;};
+	Couleur getBackground() const {return background;}
 	Scene();
-	Scene(const Point c, const Ecran& e, const PointColore s, Couleur bg, std::vector<Sphere> v);
+	Scene(const Point c, const Ecran& e, const PointColore s, const Couleur bg, const std::vector<Sphere> v, const std::vector<Triangle> t);
 	Point getCam() const {return camera;}
 	Ecran getEcran() const {return ecran;}
 	PointColore getSource() const {return source;}
 	std::vector<Sphere> getSpheres() const {return spheres;}
+	std::vector<Triangle> getTriangles() const {return triangles;}
 	int getId() const {return idCourant;}
 	void setCam(const Point cam) {camera = cam;}
 	void setEcran(const Ecran& ecran) {this->ecran = ecran;}

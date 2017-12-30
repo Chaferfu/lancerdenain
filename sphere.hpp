@@ -3,21 +3,20 @@
 #include "point.hpp"
 #include "couleur.hpp"
 #include "rayon.hpp"
+#include "objet.hpp"
 
-class Sphere{
+class Sphere: public Objet{
 private:
-	float rayon, reflexivite;
+	float rayon;
 	Point centre;
-	Couleur couleur;
 
 public:
 	Sphere();
 	Sphere(const float r, const Point c, const Couleur coul, const float reflex);
 	Sphere(const float centerX, const float centerY,const float centerZ,const float r,const int colorR,const int colorG,const int colorB,const float reflx);
 	float getRayon() const {return rayon;}
-	float getReflex() const {return reflexivite;}
 	Point getCentre() const {return centre;}
-	Couleur getCouleur() const {return couleur;}
+	
 	void afficher(std::ostream &flux) const;
 	Point normale(const Point intersection);
 
