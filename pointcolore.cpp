@@ -16,6 +16,7 @@ bool PointColore::estEgal(PointColore p){
 	return x == p.x && y == p.y && z == p.z; 
 }
 
+
 /*
 bool operator==(Couleur const& a, Couleur const& b){
     return a.estEgal(b);

@@ -99,7 +99,7 @@ PointColore Scene::getIntersection(Rayon r){
 
 		i++;
 	}
-	cout <<"T DLJDLJDLJDLJDLJDLJDLJDLJDLLJD" << t << endl;
+	//cout <<"T DLJDLJDLJDLJDLJDLJDLJDLJDLLJD" << t << endl;
 
 	return PointColore(r.getOrigine().getX() + t*r.getDirection().getX(), r.getOrigine().getY() + t*r.getDirection().getY(), r.getOrigine().getZ() + t*r.getDirection().getZ(), coul);
 }
@@ -173,11 +173,11 @@ void Scene::rayTracing(){
 	for(unsigned int i = 0; i < ecran.getResolutionVerticale(); i++){
 			for(unsigned int j = 0; j < ecran.getReso(); j++)
 			{
-				cout << "pixel n " << i*ecran.getReso() + j <<endl;
+			//	cout << "pixel n " << i*ecran.getReso() + j <<endl;
 				r = Rayon(camera, ecran.getPixel(i*ecran.getReso()+j));
-				cout << r.getOrigine() << r.getDirection() <<endl;
+			//	cout << r.getOrigine() << r.getDirection() <<endl;
 				pc = getIntersection(r);
-				cout << "intersection" << pc << endl;
+			//	cout << "intersection" << pc << endl;
 				if(idCourant != -1) // Si le rayon a touché un objet
 				{	
 					//cout << pc <<endl;
@@ -187,11 +187,13 @@ void Scene::rayTracing(){
 					//reflexion speculaire
 					
 					ref = rayonReflechi(r);
-					cout << "intersection" << pc << endl;
-					cout << ref.getOrigine() << ref.getDirection() <<endl;
+					if(i==300 && j==50) cout << "reflechi : " << ref.getOrigine() << ref.getDirection() << endl;
+			//		cout << "intersection" << pc << endl;
+			//		cout << ref.getOrigine() << ref.getDirection() <<endl;
 					pcref = getIntersection(ref);
-					cout << "BOULE REFLECHIE : " << idCourant << endl;
-					cout << "point reflechi -------:" << pcref << pcref.getCouleur() << endl;
+					if(i==300 && j==50) cout << "point reflechi : " << pcref << pcref.getCouleur() << endl;
+			//		cout << "BOULE REFLECHIE : " << idCourant << endl;
+			//		cout << "point reflechi -------:" << pcref << pcref.getCouleur() << endl;
 					ecran.getPixels()[i][j].calculerCouleurReflexion(pcref.getCouleur(), reflx);
 
 				}

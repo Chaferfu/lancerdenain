@@ -8,7 +8,7 @@
 # bottom left corner
 90 90 30
 # screen horizontal resolution
-4
+400
 # background color
 5 5 5
 # light source position
