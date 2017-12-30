@@ -61,45 +61,21 @@ PointColore Scene::getIntersection(Rayon r){
 		if(delta >= 0.0f && (sol1 >0 || sol2 > 0))
 		{
 			
-			if (sol1 > 0 && sol1 < t)
+			if (sol1 < t)
 			{
 				t = sol1;
 			}
-			if (sol2 > 0 && sol2 < t)
+			if (sol2 < t)
 			{
 				t = sol2;
 			}
 
 			coul = s.getCouleur();
 			idCourant = i;
-
-
-
-
-			/*
-
-			if (min((-b-sqrt(delta))/(2*a), (-b+sqrt(delta))/(2*a)) < 0)
-			{
-				t = max((-b-sqrt(delta))/(2*a), (-b+sqrt(delta))/(2*a));
-			}
-			else
-			{
-				t = min((-b-sqrt(delta))/(2*a), (-b+sqrt(delta))/(2*a));
-			}
-			if (t<0)
-			{
-				cout << "wololo c'est NEGATIF AAAAAAAAAAAAAAAAAAAAAAAA" << endl;
-				t = numeric_limits<float>::infinity();
-			} 
-			else cout << "PASSSSS NEGAT BBBBBBBBBBBBBBBB" << endl;
-			coul = s.getCouleur(); 
-			idCourant = i;
-			*/
 		}
 
 		i++;
 	}
-	//cout <<"T DLJDLJDLJDLJDLJDLJDLJDLJDLLJD" << t << endl;
 
 	return PointColore(r.getOrigine().getX() + t*r.getDirection().getX(), r.getOrigine().getY() + t*r.getDirection().getY(), r.getOrigine().getZ() + t*r.getDirection().getZ(), coul);
 }
@@ -171,65 +147,22 @@ void Scene::rayTracing(){
 
 	//#pragma omp parallel for
 	for(unsigned int i = 0; i < ecran.getResolutionVerticale(); i++){
-			for(unsigned int j = 0; j < ecran.getReso(); j++)
-			{
-			//	cout << "pixel n " << i*ecran.getReso() + j <<endl;
-				r = Rayon(camera, ecran.getPixel(i*ecran.getReso()+j));
-			//	cout << r.getOrigine() << r.getDirection() <<endl;
-				pc = getIntersection(r);
-			//	cout << "intersection" << pc << endl;
-				if(idCourant != -1) // Si le rayon a touché un objet
-				{	
-					//cout << pc <<endl;
-					reflx = spheres.at(idCourant).getReflex();
-					ecran.getPixels()[i][j].calculerCouleur(estVisible(pc), calculerAngle(pc) , pc.getCouleur(), source.getCouleur());
+		for(unsigned int j = 0; j < ecran.getReso(); j++){
+			r = Rayon(camera, ecran.getPixel(i*ecran.getReso()+j));
+			pc = getIntersection(r);
+			if(idCourant != -1) // Si le rayon a touché un objet
+			{	
+				reflx = spheres.at(idCourant).getReflex();
+				ecran.getPixels()[i][j].calculerCouleur(estVisible(pc), calculerAngle(pc) , pc.getCouleur(), source.getCouleur());
 					
-					//reflexion speculaire
-					
-					ref = rayonReflechi(r);
-					
-			//		cout << "intersection" << pc << endl;
-			//		cout << ref.getOrigine() << ref.getDirection() <<endl;
-					pcref = getIntersection(ref);
-					if(i==200 && j==150)
-					{
-
-						cout << "pixel " << i << " " << j << endl; 
-						cout << "rayon incident" << r.getOrigine() << r.getDirection() << endl;
-						cout << "BOULE TOUCHEE : " << idCourant << endl;
-						cout << "rayon reflechi : " << ref.getOrigine() << ref.getDirection() << endl;
-						cout << "point reflechi : " << pcref << pcref.getCouleur() << endl;
-						/*pc = getIntersection(r);
-						cout << "OK CA DEBUG \nintersection" << pc << endl;
-						cout << "idCourant" << idCourant << endl;
-						cout << "centre de la boule : " << spheres.at(idCourant).getCentre() << endl;
-						Point normale = spheres.at(idCourant).normale(pc);
-						cout << "normale" << normale << normale << endl;
-						cout << "incident " << r.getDirection() << endl;
-						Point directionUnitaireIncident = r.getDirection()/r.getDirection().norme();
- 						cout << "normalisé " << directionUnitaireIncident << endl;
-						//cout << "incident : " << directionUnitaireIncident << "normale " << normale.getDirection() << endl;
-
-						Point directionReflechi = directionUnitaireIncident - 2*(directionUnitaireIncident.scalaire(normale))*normale;
-
-						cout << "reflechi " << directionReflechi << endl;
-
-						Rayon reflechi(pc + 1.f*directionReflechi, directionReflechi);
-
-
-						//cout << "to return ::::: "  << intersection << " dir :" << directionReflechi << endl;
-						cout << "rayon reflechi " << reflechi.getOrigine() << reflechi.getDirection() << endl;*/
-
-					}
-			//		cout << "point reflechi -------:" << pcref << pcref.getCouleur() << endl;
-					ecran.getPixels()[i][j].calculerCouleurReflexion(pcref.getCouleur(), reflx);
-
-				}
-				else
-				{
-					ecran.getPixels()[i][j] = background;
-				}
+				//reflexion speculaire
+				ref = rayonReflechi(r);
+				pcref = getIntersection(ref);
+				ecran.getPixels()[i][j].calculerCouleurReflexion(pcref.getCouleur(), reflx);
 			}
+			else
+				ecran.getPixels()[i][j] = background;
+		}
 	}
 }
 
