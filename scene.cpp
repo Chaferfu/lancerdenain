@@ -187,12 +187,20 @@ void Scene::rayTracing(){
 					//reflexion speculaire
 					
 					ref = rayonReflechi(r);
-					if(i==300 && j==50) cout << "reflechi : " << ref.getOrigine() << ref.getDirection() << endl;
+					
 			//		cout << "intersection" << pc << endl;
 			//		cout << ref.getOrigine() << ref.getDirection() <<endl;
 					pcref = getIntersection(ref);
-					if(i==300 && j==50) cout << "point reflechi : " << pcref << pcref.getCouleur() << endl;
-			//		cout << "BOULE REFLECHIE : " << idCourant << endl;
+					if(i==200 && j==150)
+					{
+
+						cout << "pixel " << i << " " << j << endl; 
+						cout << "rayon incident" << r.getOrigine() << r.getDirection() << endl;
+						cout << "rayon reflechi : " << ref.getOrigine() << ref.getDirection() << endl;
+						cout << "point reflechi : " << pcref << pcref.getCouleur() << endl;
+						cout << "BOULE REFLECHIE : " << idCourant << endl;
+
+					}
 			//		cout << "point reflechi -------:" << pcref << pcref.getCouleur() << endl;
 					ecran.getPixels()[i][j].calculerCouleurReflexion(pcref.getCouleur(), reflx);
 
