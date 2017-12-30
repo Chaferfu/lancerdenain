@@ -8,7 +8,10 @@
 #include "scene.hpp"
 using namespace std;
 
-Scene::Scene(){}
+Scene::Scene()
+{
+	
+}
 
 Scene::Scene(const Point c,const  Ecran& e,const PointColore s,const Couleur coul,const vector<Sphere> v){
 	camera = c;
@@ -167,7 +170,7 @@ bool Scene::estVisible(PointColore p){
 	return false;
 }
 
-Couleur Scene::couleurDuPoint(PointColore pc)
+Couleur Scene::couleurVisible(PointColore pc)
 {
 
 }
