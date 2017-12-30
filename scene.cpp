@@ -31,7 +31,7 @@ float Scene::calculerAngle(PointColore p){
  * sinon.
  */
 PointColore Scene::getIntersection(Rayon r){
-	float a, b, c; // Coefficients du polynome d'ordre 2
+	float a, b, c, d; // Coefficients du polynome d'ordre 2
 	float sol1, sol2;
 	float delta, t = numeric_limits<float>::infinity();
 	Couleur coul = background;
@@ -52,23 +52,48 @@ PointColore Scene::getIntersection(Rayon r){
 		sol2 = (-b+sqrt(delta))/(2*a);
 
 		//Calcul des racines
-		if(delta >= 0.0f && (sol1 >0 || sol2 > 0))
-		{
-			
-			if (sol1 < t)
-			{
-				t = sol1;
+		if(delta >= 0.0f && t > min(sol1, sol2)){
+			if(sol1 > 0){
+ 				t = sol1;
+ 				coul = s.getCouleur();
+ 			idCourant = i;
 			}
-			if (sol2 < t)
-			{
-				t = sol2;
-			}
-
-			coul = s.getCouleur();
-			idCourant = i;
+ 			else if(sol2 > 0){
+ 				t = sol2;
+ 				coul = s.getCouleur();
+ 			idCourant = i;
+ 			}
+ 			
 		}
 
 		i++;
+	}
+
+	for(Triangle tri : triangles){
+		Rayon ab(tri.getP1(), tri.getP2());
+		Rayon ac(tri.getP1(), tri.getP3());
+		a = ab.getDirection().getY()*ac.getDirection().getZ() - ab.getDirection().getZ()*ac.getDirection().getY();
+		b = ab.getDirection().getZ()*ac.getDirection().getX() - ab.getDirection().getX()*ac.getDirection().getZ();
+		c = ab.getDirection().getX()*ac.getDirection().getY() - ab.getDirection().getY()*ac.getDirection().getX();
+		d = -(a*tri.getP1().getX() + b*tri.getP2().getY() + c*tri.getP3().getZ());
+		//cout << a << endl;
+		//cout << b << endl;
+		//cout << c << "\n" << endl;
+		float t2 = (-d-a*r.getOrigine().getX() - b*r.getOrigine().getY() - c*r.getOrigine().getZ())/(a*r.getDirection().getX() + b*r.getDirection().getY() + c*r.getDirection().getZ());
+		Point p(r.getOrigine().getX() + t*r.getDirection().getX(), r.getOrigine().getY() + t*r.getDirection().getY(), r.getOrigine().getZ() + t*r.getDirection().getZ());
+
+		float aire = tri.getP1().distance(tri.getP2())*tri.getP1().distance(tri.getP3())/2.0f;
+		float alpha = p.distance(tri.getP2())*p.distance(tri.getP3())/(2.0f*aire);
+		float beta = p.distance(tri.getP3())*p.distance(tri.getP1())/(2.0f*aire);
+		float gamma = 1.0f - alpha - beta;
+		if(alpha >= 0 && alpha <= 1 && beta >= 0 && beta <= 1 && gamma >= 0 && gamma <= 1){
+			cout << "Le point est dans le triangle" << endl;
+			t = t2;
+			coul = tri.getCouleur();
+		}
+		//else
+		//	cout << "Le poing est dans ta gueule" << endl;
+
 	}
 
 	return PointColore(r.getOrigine().getX() + t*r.getDirection().getX(), r.getOrigine().getY() + t*r.getDirection().getY(), r.getOrigine().getZ() + t*r.getDirection().getZ(), coul);
@@ -280,14 +305,15 @@ Scene parse(char* input){
 		{
 			cout << "c'est pas une shere mon gars" << endl;
 		}
-
 	}
 
-	cout << "parse : je n'ai plus peur de la mort" << endl;
+	vector<Triangle> triangles;
+
+	triangles.push_back(Triangle(Point(85,110,70), Point(115,110,70), Point(100,85,70)));
 
 	//TODO fermer le fichier : en fait c'est bon RAII
 	stream.close(); //pas sur que ça soit necessaire ( ça se fait dans le destructeur du stream normalement)
-	return Scene(cam, e, s, bg, v, vector<Triangle>());
+	return Scene(cam, e, s, bg, v, triangles);
 }
 
 void testParsing(char* input)
@@ -303,8 +329,7 @@ void testParsing(char* input)
 	}
 }
 
-void passerCommentaires(ifstream &stream)
-{
+void passerCommentaires(ifstream &stream){
 	while(stream.peek() == '#') stream.ignore(256,'\n');
 }
 
@@ -362,6 +387,8 @@ int main(int argc, char* argv[])
 	Scene s = parse(argv[1]);
 	
 	s.rayTracing();
+
+	//cout << s.getIntersection(Rayon(Point(1,1,1), Point(-1.2, 1.72, 2.25))) << endl;
 
 	s.ecrirePPM();
 
