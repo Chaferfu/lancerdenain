@@ -23,10 +23,12 @@ void Scene::addSphere(const Sphere s){
 }
 
 float Scene::calculerAngle(PointColore p){
+
 	Point vNormale = spheres.at(idCourant).getCentre() - p; //normale entrante ??
 	Point vRayon = source - p;
 
 	float produit = vNormale.scalaire(vRayon);
+
 
 	return acos(produit/(vNormale.norme()*vRayon.norme())) - M_PI;
 }
@@ -159,9 +161,27 @@ void Scene::ecrirePPM(){
 bool Scene::estVisible(PointColore p){
 	int prec = idCourant;
 	PointColore p2 = getIntersection(Rayon(source, p));
+	cout << idCourant << endl;
 	if(idCourant == -1 || (((Point)p2).distance((Point)source) - ((Point)p).distance((Point)source) < 0.005f && idCourant == prec))
 		return true;
 	return false;
+}
+
+Couleur Scene::couleurDuPoint(PointColore pc)
+{
+
+}
+
+void Scene::reflexion(PointColore pcref, int i, int j, float reflx)
+{
+	if (pcref.estInfini())
+	{
+		ecran.getPixels()[i][j].reflexiondansleneant(background, reflx);
+	}
+	else
+	{
+		ecran.getPixels()[i][j].calculerCouleurReflexion(estVisible(pcref), calculerAngle(pcref), pcref.getCouleur(), source.getCouleur(), reflx);
+	}
 }
 
 void Scene::rayTracing(){
@@ -185,12 +205,12 @@ void Scene::rayTracing(){
 					ecran.getPixels()[i][j].calculerCouleur(estVisible(pc), calculerAngle(pc) , pc.getCouleur(), source.getCouleur());
 					
 					//reflexion speculaire
-					
 					ref = rayonReflechi(r);
-					
-			//		cout << "intersection" << pc << endl;
-			//		cout << ref.getOrigine() << ref.getDirection() <<endl;
 					pcref = getIntersection(ref);
+					cout << "CASSE LES BOULES ********************************************************** pixel " << i << " " << j << endl;
+					reflexion(pcref, i, j, reflx);
+					
+					/*
 					if(i==200 && j==150)
 					{
 
@@ -199,7 +219,7 @@ void Scene::rayTracing(){
 						cout << "BOULE TOUCHEE : " << idCourant << endl;
 						cout << "rayon reflechi : " << ref.getOrigine() << ref.getDirection() << endl;
 						cout << "point reflechi : " << pcref << pcref.getCouleur() << endl;
-						/*pc = getIntersection(r);
+						pc = getIntersection(r);
 						cout << "OK CA DEBUG \nintersection" << pc << endl;
 						cout << "idCourant" << idCourant << endl;
 						cout << "centre de la boule : " << spheres.at(idCourant).getCentre() << endl;
@@ -218,11 +238,9 @@ void Scene::rayTracing(){
 
 
 						//cout << "to return ::::: "  << intersection << " dir :" << directionReflechi << endl;
-						cout << "rayon reflechi " << reflechi.getOrigine() << reflechi.getDirection() << endl;*/
+						cout << "rayon reflechi " << reflechi.getOrigine() << reflechi.getDirection() << endl;
 
-					}
-			//		cout << "point reflechi -------:" << pcref << pcref.getCouleur() << endl;
-					ecran.getPixels()[i][j].calculerCouleurReflexion(pcref.getCouleur(), reflx);
+					}*/
 
 				}
 				else
