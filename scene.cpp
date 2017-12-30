@@ -58,14 +58,14 @@ PointColore Scene::getIntersection(Rayon r){
 		sol2 = (-b+sqrt(delta))/(2*a);
 
 		//Calcul des racines
-		if(delta >= 0.0f)
+		if(delta >= 0.0f && (sol1 >0 || sol2 > 0))
 		{
 			
-			if (sol1 >= 0 && sol1 < t)
+			if (sol1 > 0 && sol1 < t)
 			{
 				t = sol1;
 			}
-			if (sol2 >= 0 && sol2 < t)
+			if (sol2 > 0 && sol2 < t)
 			{
 				t = sol2;
 			}
@@ -113,11 +113,11 @@ Rayon Scene::rayonReflechi(const Rayon incident)
 	PointColore intersection = getIntersection(incident);
 	if(idCourant != -1)
 	{
-		Rayon normale = spheres.at(idCourant).normale(intersection);
+		Point normale = spheres.at(idCourant).normale(intersection);
 		Point directionUnitaireIncident = incident.getDirection()/incident.getDirection().norme();
 		//cout << "incident : " << directionUnitaireIncident << "normale " << normale.getDirection() << endl;
 
-		Point directionReflechi = directionUnitaireIncident - 2*(directionUnitaireIncident.scalaire(normale.getDirection()))*normale.getDirection();
+		Point directionReflechi = directionUnitaireIncident - 2*(directionUnitaireIncident.scalaire(normale))*normale;
 
 		Rayon reflechi(intersection + 1.f*directionReflechi, directionReflechi);
 		//cout << "to return ::::: "  << intersection << " dir :" << directionReflechi << endl;
@@ -199,6 +199,26 @@ void Scene::rayTracing(){
 						cout << "rayon reflechi : " << ref.getOrigine() << ref.getDirection() << endl;
 						cout << "point reflechi : " << pcref << pcref.getCouleur() << endl;
 						cout << "BOULE REFLECHIE : " << idCourant << endl;
+						pc = getIntersection(r);
+						cout << "OK CA DEBUG \nintersection" << pc << endl;
+						cout << "idCourant" << idCourant << endl;
+						cout << "centre de la boule : " << spheres.at(idCourant).getCentre() << endl;
+						Point normale = spheres.at(idCourant).normale(pc);
+						cout << "normale" << normale << normale << endl;
+						cout << "incident " << r.getDirection() << endl;
+						Point directionUnitaireIncident = r.getDirection()/r.getDirection().norme();
+ 						cout << "normalisé " << directionUnitaireIncident << endl;
+						//cout << "incident : " << directionUnitaireIncident << "normale " << normale.getDirection() << endl;
+
+						Point directionReflechi = directionUnitaireIncident - 2*(directionUnitaireIncident.scalaire(normale))*normale;
+
+						cout << "reflechi " << directionReflechi << endl;
+
+						Rayon reflechi(pc + 1.f*directionReflechi, directionReflechi);
+
+
+						//cout << "to return ::::: "  << intersection << " dir :" << directionReflechi << endl;
+						cout << "rayon reflechi " << reflechi.getOrigine() << reflechi.getDirection() << endl;
 
 					}
 			//		cout << "point reflechi -------:" << pcref << pcref.getCouleur() << endl;

@@ -19,7 +19,7 @@ public:
 	Point getCentre() const {return centre;}
 	Couleur getCouleur() const {return couleur;}
 	void afficher(std::ostream &flux) const;
-	Rayon normale(const Point intersection);
+	Point normale(const Point intersection);
 
 };
 

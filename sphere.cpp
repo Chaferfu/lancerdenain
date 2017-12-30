@@ -28,10 +28,9 @@ void Sphere::afficher(std::ostream &flux) const
 	flux << "SPHERE ::\tposition:" << centre << " rayon:" << rayon << " couleur:" << couleur << " reflexivite" << reflexivite << std::endl;
 }
 
-Rayon Sphere::normale(const Point intersection)
+Point Sphere::normale(const Point intersection)
 {
 	Point vNormale = intersection - centre;
 	vNormale = vNormale/vNormale.norme();
-	Rayon reflechi(intersection, vNormale);
-	return reflechi;
+	return vNormale;
 }
