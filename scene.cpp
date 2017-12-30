@@ -1,21 +1,15 @@
-#include <vector>
-#include <fstream>
-#include <iostream>
-#include <string.h>			 
-#include <sstream>
-#include "couleur.hpp"
-#include "point.hpp"
 #include "scene.hpp"
 using namespace std;
 
 Scene::Scene(){}
 
-Scene::Scene(const Point c,const  Ecran& e,const PointColore s,const Couleur coul,const vector<Sphere> v){
+Scene::Scene(const Point c, const Ecran& e, const PointColore s, const Couleur coul, const vector<Sphere> v, const vector<Triangle> t){
 	camera = c;
 	ecran = e;
 	source = s;
 	background = coul;
 	spheres = v;
+	triangles = t;
 }
 
 void Scene::addSphere(const Sphere s){
@@ -293,7 +287,7 @@ Scene parse(char* input){
 
 	//TODO fermer le fichier : en fait c'est bon RAII
 	stream.close(); //pas sur que ça soit necessaire ( ça se fait dans le destructeur du stream normalement)
-	return Scene(cam, e, s, bg, v);
+	return Scene(cam, e, s, bg, v, vector<Triangle>());
 }
 
 void testParsing(char* input)
@@ -363,20 +357,9 @@ void testOpPoints()
 
 int main(int argc, char* argv[])
 {
-	if (argc == 0) cout << "il faut mettre le fichier d'enbtree en argument" << endl;
-	//testOpPoints();
+	if (argc == 0) cout << "il faut mettre le fichier d'entree en argument" << endl;
+
 	Scene s = parse(argv[1]);
-	/*cout << s.getCam() << endl;
-	cout << s.getEcran() << endl;
-	cout << "back :" << s.getBac*/
-
-	//c.testParsing();
-	//cout << "ne me detruit pas     resVer" << s.getEcran().getResolutionVerticale() << "res hor" <<  s.getEcran().getReso() << endl;
-
-	/*cout << s.getEcran().getPixel(5) << endl;
-	cout << s.getEcran().getPixel(1) << endl;
-	cout << s.getEcran().getPixel(2) << endl;
-	cout << s.getEcran().getPixel(3) << endl;*/
 	
 	s.rayTracing();
 
