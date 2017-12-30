@@ -38,6 +38,7 @@ float Scene::calculerAngle(PointColore p){
  */
 PointColore Scene::getIntersection(Rayon r){
 	float a, b, c; // Coefficients du polynome d'ordre 2
+	float sol1, sol2;
 	float delta, t = numeric_limits<float>::infinity();
 	Couleur coul = background;
 	int i = 0;
@@ -53,11 +54,47 @@ PointColore Scene::getIntersection(Rayon r){
 		// Calcul du discriminant
 		delta = pow(b, 2) - 4.0f*a*c;
 
+		sol1 = (-b-sqrt(delta))/(2*a);
+		sol2 = (-b+sqrt(delta))/(2*a);
+
 		//Calcul des racines
-		if(delta >= 0.0f && t > min((-b-sqrt(delta))/(2*a), (-b+sqrt(delta))/(2*a))){
-			t = min((-b-sqrt(delta))/(2*a), (-b+sqrt(delta))/(2*a));
+		if(delta >= 0.0f)
+		{
+			
+			if (sol1 >= 0 && sol1 < t)
+			{
+				t = sol1;
+			}
+			if (sol2 >= 0 && sol2 < t)
+			{
+				t = sol2;
+			}
+
 			coul = s.getCouleur();
 			idCourant = i;
+
+
+
+
+			/*
+
+			if (min((-b-sqrt(delta))/(2*a), (-b+sqrt(delta))/(2*a)) < 0)
+			{
+				t = max((-b-sqrt(delta))/(2*a), (-b+sqrt(delta))/(2*a));
+			}
+			else
+			{
+				t = min((-b-sqrt(delta))/(2*a), (-b+sqrt(delta))/(2*a));
+			}
+			if (t<0)
+			{
+				cout << "wololo c'est NEGATIF AAAAAAAAAAAAAAAAAAAAAAAA" << endl;
+				t = numeric_limits<float>::infinity();
+			} 
+			else cout << "PASSSSS NEGAT BBBBBBBBBBBBBBBB" << endl;
+			coul = s.getCouleur(); 
+			idCourant = i;
+			*/
 		}
 
 		i++;
@@ -77,7 +114,10 @@ Rayon Scene::rayonReflechi(const Rayon incident)
 	{
 		Rayon normale = spheres.at(idCourant).normale(intersection);
 		Point directionUnitaireIncident = incident.getDirection()/incident.getDirection().norme();
-		Rayon reflechi(intersection, directionUnitaireIncident-2*(directionUnitaireIncident.scalaire(normale.getDirection()))*normale.getDirection());
+
+		Point directionReflechi = directionUnitaireIncident - 2*(directionUnitaireIncident.scalaire(normale.getDirection()))*normale.getDirection();
+
+		Rayon reflechi(intersection + 0.005f*directionReflechi, directionReflechi);
 		return reflechi;
 	}
 	else
@@ -122,8 +162,8 @@ bool Scene::estVisible(PointColore p){
 }
 
 void Scene::rayTracing(){
-	PointColore pc;
-	Rayon r;
+	PointColore pc, pcref;
+	Rayon r, ref;
 	float reflx;
 
 	//#pragma omp parallel for
@@ -138,9 +178,9 @@ void Scene::rayTracing(){
 					
 					//reflexion speculaire
 					
-					r = rayonReflechi(r);
-					pc = getIntersection(r);
-					ecran.getPixels()[i][j].calculerCouleurReflexion(pc.getCouleur(), reflx);
+					ref = rayonReflechi(r);
+					pcref = getIntersection(ref);
+					ecran.getPixels()[i][j].calculerCouleurReflexion(pcref.getCouleur(), reflx);
 
 				}
 				else
@@ -151,8 +191,8 @@ void Scene::rayTracing(){
 	}
 }
 
-Scene parse(){
-	ifstream stream("In.txt", ifstream::in);
+Scene parse(char* input){
+	ifstream stream(input, ifstream::in);
 	string str;
 
 	passerCommentaires(stream);
@@ -281,9 +321,9 @@ Scene parse(){
 	return Scene(cam, e, s, bg, v);
 }
 
-void testParsing()
+void testParsing(char* input)
 {
-	Scene s = parse();
+	Scene s = parse(input);
 	cout << s.getCam() << endl;
 	cout << s.getEcran() << endl;
 	cout << "back :" << s.getBackground() << endl;
@@ -346,10 +386,11 @@ void testOpPoints()
 
 }
 
-int main()
+int main(int argc, char* argv[])
 {
+	if (argc == 0) cout << "il faut mettre le fichier d'enbtree en argument" << endl;
 	//testOpPoints();
-	Scene s = parse();
+	Scene s = parse(argv[1]);
 	/*cout << s.getCam() << endl;
 	cout << s.getEcran() << endl;
 	cout << "back :" << s.getBac*/

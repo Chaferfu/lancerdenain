@@ -39,7 +39,7 @@ public:
 	Rayon rayonReflechi(const Rayon incident);
 };
 
-Scene parse();
+Scene parse(char* input);
 void passerCommentaires(std::ifstream &stream);
 void passerBlancs(std::ifstream &stream);
 std::ostream& operator<<( std::ostream &flux,const Ecran & e );

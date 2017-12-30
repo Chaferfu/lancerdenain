@@ -32,6 +32,6 @@ Rayon Sphere::normale(const Point intersection)
 {
 	Point vNormale = intersection - centre;
 	vNormale = vNormale/vNormale.norme();
-	Rayon reflechi(centre, vNormale);
+	Rayon reflechi(intersection, vNormale);
 	return reflechi;
 }
