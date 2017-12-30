@@ -119,7 +119,7 @@ Rayon Scene::rayonReflechi(const Rayon incident)
 
 		Point directionReflechi = directionUnitaireIncident - 2*(directionUnitaireIncident.scalaire(normale))*normale;
 
-		Rayon reflechi(intersection + 1.f*directionReflechi, directionReflechi);
+		Rayon reflechi(intersection + 1.f*directionReflechi, intersection + 2.0f*directionReflechi);
 		//cout << "to return ::::: "  << intersection << " dir :" << directionReflechi << endl;
 		return reflechi;
 	}
@@ -196,10 +196,10 @@ void Scene::rayTracing(){
 
 						cout << "pixel " << i << " " << j << endl; 
 						cout << "rayon incident" << r.getOrigine() << r.getDirection() << endl;
+						cout << "BOULE TOUCHEE : " << idCourant << endl;
 						cout << "rayon reflechi : " << ref.getOrigine() << ref.getDirection() << endl;
 						cout << "point reflechi : " << pcref << pcref.getCouleur() << endl;
-						cout << "BOULE REFLECHIE : " << idCourant << endl;
-						pc = getIntersection(r);
+						/*pc = getIntersection(r);
 						cout << "OK CA DEBUG \nintersection" << pc << endl;
 						cout << "idCourant" << idCourant << endl;
 						cout << "centre de la boule : " << spheres.at(idCourant).getCentre() << endl;
@@ -218,7 +218,7 @@ void Scene::rayTracing(){
 
 
 						//cout << "to return ::::: "  << intersection << " dir :" << directionReflechi << endl;
-						cout << "rayon reflechi " << reflechi.getOrigine() << reflechi.getDirection() << endl;
+						cout << "rayon reflechi " << reflechi.getOrigine() << reflechi.getDirection() << endl;*/
 
 					}
 			//		cout << "point reflechi -------:" << pcref << pcref.getCouleur() << endl;
