@@ -2,7 +2,7 @@ EXEC = main
 SOURCES = couleur.cpp point.cpp sphere.cpp ecran.cpp scene.cpp rayon.cpp pointcolore.cpp 
 OBJECTS = $(SOURCES:.cpp=.o)
 CC = g++
-CFLAGS = -Wall -g -Wextra -Werror -std=c++11
+CFLAGS = -Wall -g -Wextra -std=c++11
 
 .PHONY: default clean
  

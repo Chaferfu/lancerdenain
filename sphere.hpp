@@ -16,7 +16,7 @@ public:
 	Sphere(const float centerX, const float centerY,const float centerZ,const float r,const int colorR,const int colorG,const int colorB,const float reflx);
 	float getRayon() const {return rayon;}
 	Point getCentre() const {return centre;}
-	
+	bool contient(const Point p) const;
 	void afficher(std::ostream &flux) const;
 	Point normale(const Point intersection);
 

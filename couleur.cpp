@@ -28,6 +28,13 @@ void Couleur::calculerCouleurReflexion(const int e, const float angle,const Coul
 	b = (1 - reflx)*b + reflx*e*cos(angle)*(cr.getB()*cs.getB())/255;
 }
 
+void Couleur::ajouterReflexion(const Couleur cr, const float reflx)
+{
+	r = (1 - reflx)*r + reflx*cr.getR();
+	g = (1 - reflx)*g + reflx*cr.getG();
+	b = (1 - reflx)*b + reflx*cr.getB();
+}
+
 void Couleur::reflexiondansleneant(Couleur c, float reflx)
 {
 	r = (1 - reflx)*r + reflx*c.getR();

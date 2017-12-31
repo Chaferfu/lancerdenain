@@ -1,5 +1,6 @@
 #include <iostream>
 #include <ostream>
+#include <cmath>
 #include "scene.hpp"
 #include "rayon.hpp"
 #include "sphere.hpp"
@@ -33,4 +34,10 @@ Point Sphere::normale(const Point intersection)
 	Point vNormale = intersection - centre;
 	vNormale = vNormale/vNormale.norme();
 	return vNormale;
+}
+
+bool Sphere::contient(const Point p) const
+{
+	float dist = abs(pow(p.getX() - centre.getX(), 2) + pow(p.getY() - centre.getY(), 2) + pow(p.getZ() - centre.getZ(), 2) - pow(rayon, 2));
+	return (dist < 0.005f);
 }

@@ -10,7 +10,7 @@ using namespace std;
 
 Scene::Scene()
 {
-	
+
 }
 
 Scene::Scene(const Point c,const  Ecran& e,const PointColore s,const Couleur coul,const vector<Sphere> v){
@@ -25,9 +25,20 @@ void Scene::addSphere(const Sphere s){
 	spheres.push_back(s);
 }
 
+Sphere Scene::sphereAssociee(const Point p) const
+{
+	for (Sphere s : spheres)
+	{
+		if (s.contient(p)) return s;
+	}
+
+	cout << "PAS DE SPHERE TROUVEE POUR CE POINT CEST PAS NORMAL" << endl;
+}
+
+
 float Scene::calculerAngle(PointColore p){
 
-	Point vNormale = spheres.at(idCourant).getCentre() - p; //normale entrante ??
+	Point vNormale = sphereAssociee(p).getCentre() - p; //normale entrante ??
 	Point vRayon = source - p;
 
 	float produit = vNormale.scalaire(vRayon);
@@ -66,11 +77,11 @@ PointColore Scene::getIntersection(Rayon r){
 		if(delta >= 0.0f && (sol1 >0 || sol2 > 0))
 		{
 			
-			if (sol1 > 0 && sol1 < t)
+			if (sol1 >= 0 && sol1 < t)
 			{
 				t = sol1;
 			}
-			if (sol2 > 0 && sol2 < t)
+			if (sol2 >= 0 && sol2 < t)
 			{
 				t = sol2;
 			}
@@ -116,15 +127,15 @@ PointColore Scene::getIntersection(Rayon r){
 Rayon Scene::rayonReflechi(const Rayon incident)
 {
 	PointColore intersection = getIntersection(incident);
-	if(idCourant != -1)
+	if(!intersection.estInfini())
 	{
-		Point normale = spheres.at(idCourant).normale(intersection);
+		Point normale = sphereAssociee(intersection).normale(intersection);
 		Point directionUnitaireIncident = incident.getDirection()/incident.getDirection().norme();
 		//cout << "incident : " << directionUnitaireIncident << "normale " << normale.getDirection() << endl;
 
 		Point directionReflechi = directionUnitaireIncident - 2*(directionUnitaireIncident.scalaire(normale))*normale;
 
-		Rayon reflechi(intersection + 1.f*directionReflechi, intersection + 2.0f*directionReflechi);
+		Rayon reflechi(intersection + 0.005f*directionReflechi, intersection + 2.0f*directionReflechi);
 		//cout << "to return ::::: "  << intersection << " dir :" << directionReflechi << endl;
 		return reflechi;
 	}
@@ -160,30 +171,51 @@ void Scene::ecrirePPM(){
 
 /* Renvoie vrai si le point passe en parametre recoit la lumiere de la 
  * source, faux sinon.
- */
+ 
 bool Scene::estVisible(PointColore p){
 	int prec = idCourant;
 	PointColore p2 = getIntersection(Rayon(source, p));
-	cout << idCourant << endl;
 	if(idCourant == -1 || (((Point)p2).distance((Point)source) - ((Point)p).distance((Point)source) < 0.005f && idCourant == prec))
 		return true;
 	return false;
+}*/
+
+bool Scene::estVisible(PointColore p){
+	PointColore p2 = getIntersection(Rayon(source, p));
+	return (abs(((Point)p2).distance((Point)source) - ((Point)p).distance((Point)source)) < 0.005f);
 }
 
 Couleur Scene::couleurVisible(PointColore pc)
 {
+	int r,g,b;
 
+
+	r = estVisible(pc)*cos(calculerAngle(pc))*(pc.getCouleur().getR()*source.getCouleur().getR())/255;
+	g = estVisible(pc)*cos(calculerAngle(pc))*(pc.getCouleur().getG()*source.getCouleur().getG())/255;
+	b = estVisible(pc)*cos(calculerAngle(pc))*(pc.getCouleur().getB()*source.getCouleur().getB())/255;
+
+	Couleur c(r,g,b);
+	return c;
 }
 
-void Scene::reflexion(PointColore pcref, int i, int j, float reflx)
+Couleur Scene::reflexion(Rayon ray, int i)
 {
+	PointColore pcref = getIntersection(ray);
+	float reflx;
+	if (!pcref.estInfini()) reflx = sphereAssociee(pcref).getReflex();
+
 	if (pcref.estInfini())
 	{
-		ecran.getPixels()[i][j].reflexiondansleneant(background, reflx);
+		return background;
+	}
+	else if(i<=0)
+	{
+		return couleurVisible(pcref);
 	}
 	else
 	{
-		ecran.getPixels()[i][j].calculerCouleurReflexion(estVisible(pcref), calculerAngle(pcref), pcref.getCouleur(), source.getCouleur(), reflx);
+		Rayon next = rayonReflechi(ray);
+		return (1-reflx)*couleurVisible(pcref)+reflx*reflexion(next, i-1);
 	}
 }
 
@@ -201,17 +233,20 @@ void Scene::rayTracing(){
 			//	cout << r.getOrigine() << r.getDirection() <<endl;
 				pc = getIntersection(r);
 			//	cout << "intersection" << pc << endl;
-				if(idCourant != -1) // Si le rayon a touché un objet
+				if(!pc.estInfini()) // Si le rayon a touché un objet
 				{	
+					//cout << "sphere touchée " << sphereAssociee(pc) << endl;
 					//cout << pc <<endl;
-					reflx = spheres.at(idCourant).getReflex();
+					reflx = sphereAssociee(pc).getReflex();
+
 					ecran.getPixels()[i][j].calculerCouleur(estVisible(pc), calculerAngle(pc) , pc.getCouleur(), source.getCouleur());
+					//if (i == 162  &&  j == 254) cout << " vivile " << estVisible(pc) << endl;
+					//if (i == 162  &&  j == 254) cout << " couleur "<< ecran.getPixels()[i][j] << endl;
 					
 					//reflexion speculaire
 					ref = rayonReflechi(r);
 					pcref = getIntersection(ref);
-					cout << "CASSE LES BOULES ********************************************************** pixel " << i << " " << j << endl;
-					reflexion(pcref, i, j, reflx);
+					ecran.getPixels()[i][j].ajouterReflexion(reflexion(ref, 3), reflx);
 					
 					/*
 					if(i==200 && j==150)
@@ -451,7 +486,7 @@ void testOpPoints()
 
 int main(int argc, char* argv[])
 {
-	if (argc == 0) cout << "il faut mettre le fichier d'enbtree en argument" << endl;
+	if (argc == 1) cout << "il faut mettre le fichier d'enbtree en argument" << endl;
 	//testOpPoints();
 	Scene s = parse(argv[1]);
 	/*cout << s.getCam() << endl;

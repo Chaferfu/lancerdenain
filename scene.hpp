@@ -46,8 +46,9 @@ public:
 	PointColore getIntersection(Rayon r);
 	void rayTracing();
 	Rayon rayonReflechi(const Rayon incident);
-	void reflexion(PointColore pcref, int i, int j, float reflx);
+	Couleur reflexion(Rayon ray, int i);
 	Couleur couleurVisible(PointColore pc);
+	Sphere sphereAssociee(const Point p) const;
 
 
 };
