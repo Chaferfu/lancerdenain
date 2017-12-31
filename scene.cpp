@@ -206,14 +206,14 @@ void Scene::rayTracing(){
 			if(idCourant != -1) // Si le rayon a touché un objet
 			{	
 				//cout << pc <<endl;
-				reflx = spheres.at(idCourant).getReflex();
+				//reflx = spheres.at(idCourant).getReflex();
 				ecran.getPixels()[i][j].calculerCouleur(estVisible(pc), calculerAngle(pc) , pc.getCouleur(), source.getCouleur());
 					
 				//reflexion speculaire
-				ref = rayonReflechi(r);
-				pcref = getIntersection(ref);
-				cout << "CASSE LES BOULES ********************************************************** pixel " << i << " " << j << endl;
-				reflexion(pcref, i, j, reflx);
+				//ref = rayonReflechi(r);
+				//pcref = getIntersection(ref);
+				//cout << "CASSE LES BOULES ********************************************************** pixel " << i << " " << j << endl;
+				//reflexion(pcref, i, j, reflx);
 					
 					/*
 					if(i==200 && j==150)
@@ -256,134 +256,130 @@ void Scene::rayTracing(){
 
 Scene parse(char* input){
 	ifstream stream(input, ifstream::in);
-	string str;
 
-	passerCommentaires(stream);
+	if(stream){
+		string str;
+		float x = 0, y = 0, z = 0, radius = 0, reflx = 0;
+		int res = 0, r = 0, g = 0, b = 0;
 
+		passerCommentaires(stream);
 
-	//creation camera
-
-	float x = 0, y = 0, z = 0, radius = 0, reflx = 0;
-	int res = 0, r = 0, g = 0, b = 0;
-
-	getline(stream, str);
-	istringstream iss(str);
-	if(!(iss >> x >> y >> z)){
-		cout << "hmmm ça bug 1" << endl;
-	}
-	
-	Point cam = Point(x, y, z);
-
-	passerBlancs(stream);
-	passerCommentaires(stream);
-
-	//creation screen pos top left
-
-	getline(stream, str);
-	iss = (istringstream(str));
-	if(!(iss >> x >> y >> z))
-	{
-		cout << "hmmm ça bug 2" << endl;
-	}
-
-	Point pointTL(x,y,z);
-
-	passerBlancs(stream);
-	passerCommentaires(stream);
-
-	getline(stream, str);
-	iss = (istringstream(str));
-	if(!(iss >> x >> y >> z))
-	{
-		cout << "hmmm ça bug 3" << endl;
-	}
-
-	Point pointTR(x,y,z);
-
-	passerBlancs(stream);
-	passerCommentaires(stream);
-
-	getline(stream, str);
-	iss = (istringstream(str));
-	if(!(iss >> x >> y >> z))
-	{
-		cout << "hmmm ça bug 4" << endl;
-	}
-
-	Point pointBT(x,y,z);
-
-	passerBlancs(stream);
-	passerCommentaires(stream);
-
-	getline(stream, str);
-	iss = (istringstream(str));
-	if(!(iss >> res))
-	{
-		cout << "hmmm ça bug 5" << endl;
-	}
-
-	Ecran e(res, pointTL,pointTR,pointBT);
-
-	passerBlancs(stream);
-	passerCommentaires(stream);
-
-	getline(stream, str);
-	iss = (istringstream(str));
-	if(!(iss >> r >> g >> b))
-	{
-		cout << "hmmm ça bug 6" << endl;
-	}
-
-	Couleur bg(r,g,b);
-
-	passerBlancs(stream);
-	passerCommentaires(stream);
-
-	getline(stream, str);
-	iss = (istringstream(str));
-	if(!(iss >> x >> y >> z >> r >> g >> b))
-	{
-		cout << "hmmm ça bug 7" << endl;
-	}
-
-	PointColore s = PointColore(x,y,z, Couleur(r, g, b));
-
-	passerBlancs(stream);
-	passerCommentaires(stream);
-
-	vector<Sphere> v;
-	string type;
-
-	while(getline(stream, str))
-	{
+		//creation camera
+		getline(stream, str);
 		istringstream iss(str);
+		if(!(iss >> x >> y >> z)){
+			cerr << "Camera : fichier mal ecrit" << endl;
+			exit(0);
+		}
+		
+		Point cam = Point(x, y, z);
 
+		passerBlancs(stream);
+		passerCommentaires(stream);
 
-		if(!(iss >> type >> x >> y >> z >> radius >> r >> g >> b >> reflx))
-		{
-			cout << "hmmm ça bug" << endl;
-			break;
+		//creation screen pos top left
+		getline(stream, str);
+		iss = (istringstream(str));
+		if(!(iss >> x >> y >> z)){
+			cerr << "TopLeft : fichier mal ecrit" << endl;
+			exit(0);
 		}
 
-		if(!strcmp(type.c_str(), "sphere:"))
-		{
-			Sphere s(x, y, z, radius, r, g, b, reflx);
-			v.push_back(s);
+		Point pointTL(x,y,z);
+
+		passerBlancs(stream);
+		passerCommentaires(stream);
+
+		getline(stream, str);
+		iss = (istringstream(str));
+		if(!(iss >> x >> y >> z)){
+			cerr << "TopRight : fichier mal ecrit" << endl;
+			exit(0);
 		}
-		else
-		{
-			cout << "c'est pas une shere mon gars" << endl;
+
+		Point pointTR(x,y,z);
+
+		passerBlancs(stream);
+		passerCommentaires(stream);
+
+		getline(stream, str);
+		iss = (istringstream(str));
+		if(!(iss >> x >> y >> z)){
+			cerr << "BottomLeft : fichier mal ecrit" << endl;
+			exit(0);
 		}
+
+		Point pointBT(x,y,z);
+
+		passerBlancs(stream);
+		passerCommentaires(stream);
+
+		getline(stream, str);
+		iss = (istringstream(str));
+		if(!(iss >> res)){
+			cerr << "Resolution : fichier mal ecrit" << endl;
+			exit(0);
+		}
+
+		Ecran e(res, pointTL,pointTR,pointBT);
+
+		passerBlancs(stream);
+		passerCommentaires(stream);
+
+		getline(stream, str);
+		iss = (istringstream(str));
+		if(!(iss >> r >> g >> b)){
+			cerr << "Background : fichier mal ecrit" << endl;
+			exit(0);
+		}
+
+		Couleur bg(r,g,b);
+
+		passerBlancs(stream);
+		passerCommentaires(stream);
+
+		getline(stream, str);
+		iss = (istringstream(str));
+		if(!(iss >> x >> y >> z >> r >> g >> b)){
+			cerr << "Source : fichier mal ecrit" << endl;
+			exit(0);
+		}
+
+		PointColore s = PointColore(x,y,z, Couleur(r, g, b));
+
+		passerBlancs(stream);
+		passerCommentaires(stream);
+
+		vector<Sphere> v;
+		string type;
+
+		// creation spheres
+		while(getline(stream, str)){
+			istringstream iss(str);
+
+			if(!(iss >> type >> x >> y >> z >> radius >> r >> g >> b >> reflx)){
+				cerr << "Sphere : fichier mal ecrit" << endl;
+				exit(0);
+			}
+
+			if(!strcmp(type.c_str(), "sphere:")){
+				Sphere s(x, y, z, radius, r, g, b, reflx);
+				v.push_back(s);
+			}
+			else
+				cout << "c'est pas une shere mon gars" << endl;
+		}
+
+		// Pour les tests
+		vector<Triangle> triangles;
+		triangles.push_back(Triangle(Point(85,110,50), Point(115,110,50), Point(100,85,50)));
+
+		return Scene(cam, e, s, bg, v, triangles);
 	}
-
-	vector<Triangle> triangles;
-
-	triangles.push_back(Triangle(Point(85,110,50), Point(115,110,50), Point(100,85,50)));
-
-	//TODO fermer le fichier : en fait c'est bon RAII
-	stream.close(); //pas sur que ça soit necessaire ( ça se fait dans le destructeur du stream normalement)
-	return Scene(cam, e, s, bg, v, triangles);
-
+	else{
+		cerr << "Impossible d'ouvrir le fichier" << endl;
+		exit(0);
+	}
 }
 
 void testParsing(char* input)

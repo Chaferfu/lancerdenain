@@ -30,20 +30,10 @@ Ecran::Ecran(const int res, const Point tl, const Point tr, const Point bl){
 
 }
 
-void Ecran::deleteE()
-{
-	
-	cout << "reso h " << resolution << "  reso v " << resolutionVerticale << endl;
-	
+void Ecran::deleteE(){
 	for(unsigned int i = 0; i < resolutionVerticale; ++i)
-	{
-		cout << "je delete  " << i << " " << this << endl;
-		delete[] pixels[i]; 
-	} 
-	cout << "je delete le dernier" << endl;
+		delete[] pixels[i];
 	delete[] pixels;
-	
-	
 }
 
 Point Ecran::getPixel(const unsigned int i)
