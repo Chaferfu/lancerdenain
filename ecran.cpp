@@ -31,8 +31,7 @@ Ecran::Ecran(const int res, const Point tl, const Point tr, const Point bl){
 }
 
 void Ecran::deleteE(){
-	for(unsigned int i = 0; i < resolutionVerticale; ++i)
-		delete[] pixels[i];
+	for(unsigned int i = 0; i < resolutionVerticale; ++i) delete[] pixels[i];
 	delete[] pixels;
 }
 

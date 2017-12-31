@@ -56,7 +56,7 @@ float Scene::calculerAngle(PointColore p){
  * sinon.
  */
 PointColore Scene::getIntersection(Rayon r){
-	float a, b, c/*, d*/; // Coefficients du polynome d'ordre 2
+	float a, b, c/*,d*/; // Coefficients du polynome d'ordre 2
 	float sol1, sol2;
 	float delta, t = numeric_limits<float>::infinity();
 	Couleur coul = background;
