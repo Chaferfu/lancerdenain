@@ -30,7 +30,6 @@ public:
 	Couleur getBackground() const {return background;}
 	Scene();
 	Scene(const Point c, const Ecran& e, const PointColore s, const Couleur bg, const std::vector<Sphere> v, const std::vector<Triangle> t);
-	Scene(const Point c, const Ecran& e, const PointColore s, const Couleur bg, const std::vector<Sphere> v);
 	Point getCam() const {return camera;}
 	Ecran getEcran() const {return ecran;}
 	PointColore getSource() const {return source;}

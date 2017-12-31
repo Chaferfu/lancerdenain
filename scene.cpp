@@ -13,12 +13,13 @@ Scene::Scene()
 
 }
 
-Scene::Scene(const Point c,const  Ecran& e,const PointColore s,const Couleur coul,const vector<Sphere> v){
+Scene::Scene(const Point c,const  Ecran& e,const PointColore s,const Couleur coul,const vector<Sphere> v, const vector<Triangle> t){
 	camera = c;
 	ecran = e;
 	source = s;
 	background = coul;
 	spheres = v;
+	triangles = t;
 }
 
 void Scene::addSphere(const Sphere s){
@@ -47,13 +48,12 @@ float Scene::calculerAngle(PointColore p){
 	return acos(produit/(vNormale.norme()*vRayon.norme())) - M_PI;
 }
 
-
 /* Renvoie le point d'intersection entre un rayon et l'objet le plus 
  * proche de la caméra s'il existe, un point aux coordonnées infinies 
  * sinon.
  */
 PointColore Scene::getIntersection(Rayon r){
-	float a, b, c; // Coefficients du polynome d'ordre 2
+	float a, b, c, d; // Coefficients du polynome d'ordre 2
 	float sol1, sol2;
 	float delta, t = numeric_limits<float>::infinity();
 	Couleur coul = background;
@@ -74,48 +74,52 @@ PointColore Scene::getIntersection(Rayon r){
 		sol2 = (-b+sqrt(delta))/(2*a);
 
 		//Calcul des racines
-		if(delta >= 0.0f && (sol1 >0 || sol2 > 0))
-		{
-			
-			if (sol1 >= 0 && sol1 < t)
-			{
-				t = sol1;
+
+		if(delta >= 0.0f && t > min(sol1, sol2)){
+			if(sol1 > 0){
+ 				t = sol1;
+ 				coul = s.getCouleur();
+ 				idCourant = i;
+
 			}
-			if (sol2 >= 0 && sol2 < t)
-			{
-				t = sol2;
-			}
-
-			coul = s.getCouleur();
-			idCourant = i;
-
-
-
-
-			/*
-
-			if (min((-b-sqrt(delta))/(2*a), (-b+sqrt(delta))/(2*a)) < 0)
-			{
-				t = max((-b-sqrt(delta))/(2*a), (-b+sqrt(delta))/(2*a));
-			}
-			else
-			{
-				t = min((-b-sqrt(delta))/(2*a), (-b+sqrt(delta))/(2*a));
-			}
-			if (t<0)
-			{
-				cout << "wololo c'est NEGATIF AAAAAAAAAAAAAAAAAAAAAAAA" << endl;
-				t = numeric_limits<float>::infinity();
-			} 
-			else cout << "PASSSSS NEGAT BBBBBBBBBBBBBBBB" << endl;
-			coul = s.getCouleur(); 
-			idCourant = i;
-			*/
+ 			else if(sol2 > 0){
+ 				t = sol2;
+ 				coul = s.getCouleur();
+ 				idCourant = i;
+ 			}
 		}
 
 		i++;
 	}
-	//cout <<"T DLJDLJDLJDLJDLJDLJDLJDLJDLLJD" << t << endl;
+
+	/*for(Triangle tri : triangles){
+		Rayon ab(tri.getP1(), tri.getP2());
+		Rayon ac(tri.getP1(), tri.getP3());
+		a = ab.getDirection().getY()*ac.getDirection().getZ() - ab.getDirection().getZ()*ac.getDirection().getY();
+		b = ab.getDirection().getZ()*ac.getDirection().getX() - ab.getDirection().getX()*ac.getDirection().getZ();
+		c = ab.getDirection().getX()*ac.getDirection().getY() - ab.getDirection().getY()*ac.getDirection().getX();
+		d = -(a*tri.getP1().getX() + b*tri.getP2().getY() + c*tri.getP3().getZ());
+		//cout << a << endl;
+		//cout << b << endl;
+		//cout << c << "\n" << endl;
+		float t2 = (-d-a*r.getOrigine().getX() - b*r.getOrigine().getY() - c*r.getOrigine().getZ())/(a*r.getDirection().getX() + b*r.getDirection().getY() + c*r.getDirection().getZ());
+		Point p(r.getOrigine().getX() + t*r.getDirection().getX(), r.getOrigine().getY() + t*r.getDirection().getY(), r.getOrigine().getZ() + t*r.getDirection().getZ());
+
+		float aire = tri.getP1().distance(tri.getP2())*tri.getP1().distance(tri.getP3())/2.0f;
+		float alpha = p.distance(tri.getP2())*p.distance(tri.getP3())/(2.0f*aire);
+		float beta = p.distance(tri.getP3())*p.distance(tri.getP1())/(2.0f*aire);
+		float gamma = 1.0f - alpha - beta;
+		if(alpha >= 0 && alpha <= 1 && beta >= 0 && beta <= 1 && gamma >= 0 && gamma <= 1 && t2 < t){
+			//cout << "Le point est dans le triangle" << endl;
+			t = t2;
+			coul = tri.getCouleur();
+			idCourantT = i;
+			idCourant = -1;
+		}
+		//else
+		//	cout << "Le poing est dans ta gueule" << endl;
+
+	}*/
 
 	return PointColore(r.getOrigine().getX() + t*r.getDirection().getX(), r.getOrigine().getY() + t*r.getDirection().getY(), r.getOrigine().getZ() + t*r.getDirection().getZ(), coul);
 }
@@ -146,7 +150,6 @@ Rayon Scene::rayonReflechi(const Rayon incident)
 	}
 }
 
-
 void Scene::ecrirePPM(){
 	try{
 		ofstream fichier("image.ppm", ios::out | ios::trunc);
@@ -160,6 +163,8 @@ void Scene::ecrirePPM(){
 			for(unsigned int j = 0; j < ecran.getReso(); j++)
 				fichier << ecran.getPixels()[i][j] << endl;
 		}
+
+		ecran.deleteE();
 
 		fichier.close();
 	} catch(exception const& e){
@@ -226,13 +231,13 @@ void Scene::rayTracing(){
 
 	//#pragma omp parallel for
 	for(unsigned int i = 0; i < ecran.getResolutionVerticale(); i++){
-			for(unsigned int j = 0; j < ecran.getReso(); j++)
-			{
+		for(unsigned int j = 0; j < ecran.getReso(); j++){
 			//	cout << "pixel n " << i*ecran.getReso() + j <<endl;
-				r = Rayon(camera, ecran.getPixel(i*ecran.getReso()+j));
+			r = Rayon(camera, ecran.getPixel(i*ecran.getReso()+j));
 			//	cout << r.getOrigine() << r.getDirection() <<endl;
-				pc = getIntersection(r);
+			pc = getIntersection(r);
 			//	cout << "intersection" << pc << endl;
+
 				if(!pc.estInfini()) // Si le rayon a touché un objet
 				{	
 					//cout << "sphere touchée " << sphereAssociee(pc) << endl;
@@ -247,6 +252,7 @@ void Scene::rayTracing(){
 					ref = rayonReflechi(r);
 					pcref = getIntersection(ref);
 					ecran.getPixels()[i][j].ajouterReflexion(reflexion(ref, 3), reflx);
+
 					
 					/*
 					if(i==200 && j==150)
@@ -280,143 +286,139 @@ void Scene::rayTracing(){
 
 					}*/
 
-				}
-				else
-				{
-					ecran.getPixels()[i][j] = background;
-				}
 			}
+			else
+				ecran.getPixels()[i][j] = background;
+		}
 	}
 }
 
 Scene parse(char* input){
 	ifstream stream(input, ifstream::in);
-	string str;
 
-	passerCommentaires(stream);
+	if(stream){
+		string str;
+		float x = 0, y = 0, z = 0, radius = 0, reflx = 0;
+		int res = 0, r = 0, g = 0, b = 0;
 
+		passerCommentaires(stream);
 
-	//creation camera
-
-	float x, y, z, radius, reflx;
-	int res, r, g, b;
-
-	getline(stream, str);
-	istringstream iss(str);
-	if(!(iss >> x >> y >> z)){
-		cout << "hmmm ça bug 1" << endl;
-	}
-	
-	Point cam = Point(x, y, z);
-
-	passerBlancs(stream);
-	passerCommentaires(stream);
-
-	//creation screen pos top left
-
-	getline(stream, str);
-	iss = (istringstream(str));
-	if(!(iss >> x >> y >> z))
-	{
-		cout << "hmmm ça bug 2" << endl;
-	}
-
-	Point pointTL(x,y,z);
-
-	passerBlancs(stream);
-	passerCommentaires(stream);
-
-	getline(stream, str);
-	iss = (istringstream(str));
-	if(!(iss >> x >> y >> z))
-	{
-		cout << "hmmm ça bug 3" << endl;
-	}
-
-	Point pointTR(x,y,z);
-
-	passerBlancs(stream);
-	passerCommentaires(stream);
-
-	getline(stream, str);
-	iss = (istringstream(str));
-	if(!(iss >> x >> y >> z))
-	{
-		cout << "hmmm ça bug 4" << endl;
-	}
-
-	Point pointBT(x,y,z);
-
-	passerBlancs(stream);
-	passerCommentaires(stream);
-
-	getline(stream, str);
-	iss = (istringstream(str));
-	if(!(iss >> res))
-	{
-		cout << "hmmm ça bug 5" << endl;
-	}
-
-	Ecran e(res, pointTL,pointTR,pointBT);
-
-	passerBlancs(stream);
-	passerCommentaires(stream);
-
-	getline(stream, str);
-	iss = (istringstream(str));
-	if(!(iss >> r >> g >> b))
-	{
-		cout << "hmmm ça bug 6" << endl;
-	}
-
-	Couleur bg(r,g,b);
-
-	passerBlancs(stream);
-	passerCommentaires(stream);
-
-	getline(stream, str);
-	iss = (istringstream(str));
-	if(!(iss >> x >> y >> z >> r >> g >> b))
-	{
-		cout << "hmmm ça bug 7" << endl;
-	}
-
-	PointColore s = PointColore(x,y,z, Couleur(r, g, b));
-
-	passerBlancs(stream);
-	passerCommentaires(stream);
-
-	vector<Sphere> v;
-	string type;
-
-	while(getline(stream, str))
-	{
+		//creation camera
+		getline(stream, str);
 		istringstream iss(str);
+		if(!(iss >> x >> y >> z)){
+			cerr << "Camera : fichier mal ecrit" << endl;
+			exit(0);
+		}
+		
+		Point cam = Point(x, y, z);
 
+		passerBlancs(stream);
+		passerCommentaires(stream);
 
-		if(!(iss >> type >> x >> y >> z >> radius >> r >> g >> b >> reflx))
-		{
-			cout << "hmmm ça bug" << endl;
-			break;
+		//creation screen pos top left
+		getline(stream, str);
+		iss = (istringstream(str));
+		if(!(iss >> x >> y >> z)){
+			cerr << "TopLeft : fichier mal ecrit" << endl;
+			exit(0);
 		}
 
-		if(!strcmp(type.c_str(), "sphere:"))
-		{
-			Sphere s(x, y, z, radius, r, g, b, reflx);
-			v.push_back(s);
-		}
-		else
-		{
-			cout << "c'est pas une shere mon gars" << endl;
+		Point pointTL(x,y,z);
+
+		passerBlancs(stream);
+		passerCommentaires(stream);
+
+		getline(stream, str);
+		iss = (istringstream(str));
+		if(!(iss >> x >> y >> z)){
+			cerr << "TopRight : fichier mal ecrit" << endl;
+			exit(0);
 		}
 
+		Point pointTR(x,y,z);
+
+		passerBlancs(stream);
+		passerCommentaires(stream);
+
+		getline(stream, str);
+		iss = (istringstream(str));
+		if(!(iss >> x >> y >> z)){
+			cerr << "BottomLeft : fichier mal ecrit" << endl;
+			exit(0);
+		}
+
+		Point pointBT(x,y,z);
+
+		passerBlancs(stream);
+		passerCommentaires(stream);
+
+		getline(stream, str);
+		iss = (istringstream(str));
+		if(!(iss >> res)){
+			cerr << "Resolution : fichier mal ecrit" << endl;
+			exit(0);
+		}
+
+		Ecran e(res, pointTL,pointTR,pointBT);
+
+		passerBlancs(stream);
+		passerCommentaires(stream);
+
+		getline(stream, str);
+		iss = (istringstream(str));
+		if(!(iss >> r >> g >> b)){
+			cerr << "Background : fichier mal ecrit" << endl;
+			exit(0);
+		}
+
+		Couleur bg(r,g,b);
+
+		passerBlancs(stream);
+		passerCommentaires(stream);
+
+		getline(stream, str);
+		iss = (istringstream(str));
+		if(!(iss >> x >> y >> z >> r >> g >> b)){
+			cerr << "Source : fichier mal ecrit" << endl;
+			exit(0);
+		}
+
+		PointColore s = PointColore(x,y,z, Couleur(r, g, b));
+
+		passerBlancs(stream);
+		passerCommentaires(stream);
+
+		vector<Sphere> v;
+		string type;
+
+		// creation spheres
+		while(getline(stream, str)){
+			istringstream iss(str);
+
+			if(!(iss >> type >> x >> y >> z >> radius >> r >> g >> b >> reflx)){
+				cerr << "Sphere : fichier mal ecrit" << endl;
+				exit(0);
+			}
+
+			if(!strcmp(type.c_str(), "sphere:")){
+				Sphere s(x, y, z, radius, r, g, b, reflx);
+				v.push_back(s);
+			}
+			else
+				cout << "c'est pas une shere mon gars" << endl;
+		}
+
+		// Pour les tests
+		vector<Triangle> triangles;
+		triangles.push_back(Triangle(Point(85,110,50), Point(115,110,50), Point(100,85,50)));
+
+		return Scene(cam, e, s, bg, v, triangles);
 	}
-
-	cout << "parse : je n'ai plus peur de la mort" << endl;
-
-	//TODO fermer le fichier : en fait c'est bon RAII
-	stream.close(); //pas sur que ça soit necessaire ( ça se fait dans le destructeur du stream normalement)
-	return Scene(cam, e, s, bg, v);
+	else{
+		cerr << "Impossible d'ouvrir le fichier" << endl;
+		exit(0);
+	}
 }
 
 void testParsing(char* input)
@@ -432,8 +434,7 @@ void testParsing(char* input)
 	}
 }
 
-void passerCommentaires(ifstream &stream)
-{
+void passerCommentaires(ifstream &stream){
 	while(stream.peek() == '#') stream.ignore(256,'\n');
 }
 
@@ -486,24 +487,14 @@ void testOpPoints()
 
 int main(int argc, char* argv[])
 {
-	if (argc == 1) cout << "il faut mettre le fichier d'enbtree en argument" << endl;
-	//testOpPoints();
-	Scene s = parse(argv[1]);
-	/*cout << s.getCam() << endl;
-	cout << s.getEcran() << endl;
-	cout << "back :" << s.getBac*/
-
-	//c.testParsing();
-	//cout << "ne me detruit pas     resVer" << s.getEcran().getResolutionVerticale() << "res hor" <<  s.getEcran().getReso() << endl;
-
-	/*cout << s.getEcran().getPixel(5) << endl;
-	cout << s.getEcran().getPixel(1) << endl;
-	cout << s.getEcran().getPixel(2) << endl;
-	cout << s.getEcran().getPixel(3) << endl;*/
-	
-	s.rayTracing();
-
-	s.ecrirePPM();
+	if (argc > 1){
+		Scene s = parse(argv[1]);
+		s.rayTracing();
+		//cout << s.getIntersection(Rayon(Point(1,1,1), Point(-1.2, 1.72, 2.25))) << endl;
+		s.ecrirePPM();
+	} 
+	else
+		cerr << "il faut mettre le fichier d'entree en argument" << endl;
 
 	return 0;
 }
