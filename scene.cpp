@@ -10,7 +10,7 @@ using namespace std;
 
 Scene::Scene()
 {
-
+	/* lol */
 }
 
 Scene::Scene(const Point c,const  Ecran& e,const PointColore s,const Couleur coul,const vector<Sphere> v, const vector<Triangle> t){
@@ -34,6 +34,9 @@ Sphere Scene::sphereAssociee(const Point p) const
 	}
 
 	cout << "PAS DE SPHERE TROUVEE POUR CE POINT CEST PAS NORMAL" << endl;
+
+	Sphere bug(0, 0, 0, 1, 0, 0, 0, 0);
+	return bug;
 }
 
 
@@ -53,7 +56,7 @@ float Scene::calculerAngle(PointColore p){
  * sinon.
  */
 PointColore Scene::getIntersection(Rayon r){
-	float a, b, c, d; // Coefficients du polynome d'ordre 2
+	float a, b, c/*, d*/; // Coefficients du polynome d'ordre 2
 	float sol1, sol2;
 	float delta, t = numeric_limits<float>::infinity();
 	Couleur coul = background;

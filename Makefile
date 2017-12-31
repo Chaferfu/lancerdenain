@@ -6,7 +6,7 @@ OBJ_FILES = couleur.o ecran.o objet.o point.o pointcolore.o rayon.o scene.o sphe
 all : $(EXEC_NAME)
 
 clean :
-	rm $(EXEC_NAME) $(OBJ_FILES)
+	rm $(OBJ_FILES)
 
 $(EXEC_NAME) : $(OBJ_FILES)
 	$(CC) -o $(EXEC_NAME) $(OBJ_FILES) $(LIBS)
