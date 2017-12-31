@@ -5,12 +5,12 @@
 
 class Objet{
 protected:
-	float reflexivite;
 	Couleur couleur;
+	float reflexivite;
 
 public:
 	Objet();
-	Objet(Couleur c) : couleur(c) {}
+	Objet(Couleur c, float ref) : couleur(c), reflexivite(ref) {}
 	float getReflex() const {return reflexivite;}
 	Couleur getCouleur() const {return couleur;}
 };

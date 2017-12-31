@@ -25,7 +25,6 @@ float Scene::calculerAngle(PointColore p){
 	return acos(produit/(vNormale.norme()*vRayon.norme())) - M_PI;
 }
 
-
 /* Renvoie le point d'intersection entre un rayon et l'objet le plus 
  * proche de la caméra s'il existe, un point aux coordonnées infinies 
  * sinon.
@@ -69,7 +68,7 @@ PointColore Scene::getIntersection(Rayon r){
 		i++;
 	}
 
-	for(Triangle tri : triangles){
+	/*for(Triangle tri : triangles){
 		Rayon ab(tri.getP1(), tri.getP2());
 		Rayon ac(tri.getP1(), tri.getP3());
 		a = ab.getDirection().getY()*ac.getDirection().getZ() - ab.getDirection().getZ()*ac.getDirection().getY();
@@ -86,15 +85,17 @@ PointColore Scene::getIntersection(Rayon r){
 		float alpha = p.distance(tri.getP2())*p.distance(tri.getP3())/(2.0f*aire);
 		float beta = p.distance(tri.getP3())*p.distance(tri.getP1())/(2.0f*aire);
 		float gamma = 1.0f - alpha - beta;
-		if(alpha >= 0 && alpha <= 1 && beta >= 0 && beta <= 1 && gamma >= 0 && gamma <= 1){
-			cout << "Le point est dans le triangle" << endl;
+		if(alpha >= 0 && alpha <= 1 && beta >= 0 && beta <= 1 && gamma >= 0 && gamma <= 1 && t2 < t){
+			//cout << "Le point est dans le triangle" << endl;
 			t = t2;
 			coul = tri.getCouleur();
+			idCourantT = i;
+			idCourant = -1;
 		}
 		//else
 		//	cout << "Le poing est dans ta gueule" << endl;
 
-	}
+	}*/
 
 	return PointColore(r.getOrigine().getX() + t*r.getDirection().getX(), r.getOrigine().getY() + t*r.getDirection().getY(), r.getOrigine().getZ() + t*r.getDirection().getZ(), coul);
 }
@@ -124,7 +125,6 @@ Rayon Scene::rayonReflechi(const Rayon incident)
 		return incident;
 	}
 }
-
 
 void Scene::ecrirePPM(){
 	try{
@@ -179,6 +179,7 @@ void Scene::rayTracing(){
 				pcref = getIntersection(ref);
 				ecran.getPixels()[i][j].calculerCouleurReflexion(pcref.getCouleur(), reflx);
 			}
+
 			else
 				ecran.getPixels()[i][j] = background;
 		}
@@ -309,7 +310,7 @@ Scene parse(char* input){
 
 	vector<Triangle> triangles;
 
-	triangles.push_back(Triangle(Point(85,110,70), Point(115,110,70), Point(100,85,70)));
+	triangles.push_back(Triangle(Point(85,110,50), Point(115,110,50), Point(100,85,50)));
 
 	//TODO fermer le fichier : en fait c'est bon RAII
 	stream.close(); //pas sur que ça soit necessaire ( ça se fait dans le destructeur du stream normalement)
