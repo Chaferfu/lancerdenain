@@ -33,12 +33,13 @@ void Sphere::afficher(std::ostream &flux) const
 Point Sphere::normale(const Point intersection)
 {
 	Point vNormale = intersection - centre;
-	vNormale = vNormale/vNormale.norme();
+	vNormale = vNormale/vNormale.norme(); //normalisation du vecteur
 	return vNormale;
 }
 
 bool Sphere::contient(const Point p) const
 {
-	float dist = abs(pow(p.getX() - centre.getX(), 2) + pow(p.getY() - centre.getY(), 2) + pow(p.getZ() - centre.getZ(), 2) - pow(rayon, 2));
-	return (dist < 0.005f);
+
+	float dist = abs(pow(p.getX() - centre.getX(), 2) + pow(p.getY() - centre.getY(), 2) + pow(p.getZ() - centre.getZ(), 2) - pow(rayon, 2)); //on injecte les coordonnees du point dans l'equation de la sphere
+	return (dist < 0.005f); //2 floats ne peuvent pas etre egaux donc on teste s'ils sont tres proches
 }

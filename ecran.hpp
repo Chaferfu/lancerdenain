@@ -4,18 +4,21 @@
 
 class Ecran{
 private:
-	unsigned int resolution;
+	unsigned int resolution; //horizontale
 	unsigned int resolutionVerticale;
 	Point topLeft;
 	Point topRight;
 	Point bottomLeft;
-	Couleur ** pixels;
+	Couleur ** pixels; //tableau dans lequel sont stockées les couleurs visibles
 
 public:
 	Ecran();
-	//Ecran(Ecran const& other) { std::cout << "JE SUIS LE CONSTRUCTERU PointR COPIE QUI PETE LES COUILLES ET JE SUIS APPELLE ICI" << __LINE__ << __FILE__<< std::endl; }
+
 	Ecran(const int res, const Point tl, const Point tr, const Point bl);
+
+	/* detruit proprement le tableau alloué dynamiquement */
 	void deleteE();
+
 	unsigned int getReso() const {return resolution;}
 	unsigned int getResolutionVerticale() const {return resolutionVerticale;}
 	Point getTopLeft() const {return topLeft;}
@@ -27,6 +30,8 @@ public:
 	void setTopRight(const Point p) {topRight = p;}
 	void setBottomLeft(const Point p) {bottomLeft = p;}
 	void setResolution(const int r) {resolution = r;}
+
+	/* affiche les attributs de l'ecran dans le stream*/
 	void afficher(std::ostream &flux) const;	
 	
 };

@@ -15,8 +15,14 @@ public:
 	Sphere(const float centerX, const float centerY,const float centerZ,const float r,const int colorR,const int colorG,const int colorB,const float reflx);
 	float getRayon() const {return rayon;}
 	Point getCentre() const {return centre;}
+
+	/*retourne vrai si le point est sur le contour de la sphere*/
 	bool contient(const Point p) const;
+
+	/*affiche les attributs de la sphere dans le stream*/
 	void afficher(std::ostream &flux) const;
+
+	/*renvoie le vecteur directeur de la norme sortante au point p*/
 	Point normale(const Point intersection);
 
 };

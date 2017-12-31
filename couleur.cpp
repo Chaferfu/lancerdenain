@@ -16,6 +16,8 @@ Couleur::Couleur(const unsigned char r, const unsigned char g, const unsigned ch
 }
 
 void Couleur::calculerCouleur(const int e, const float angle, Couleur ci, Couleur cs){
+
+	//calcul de la couleur avec la formule du sujet
 	r = e*cos(angle)*(ci.getR()*cs.getR())/255;
 	g = e*cos(angle)*(ci.getG()*cs.getG())/255;
 	b = e*cos(angle)*(ci.getB()*cs.getB())/255;
@@ -38,6 +40,8 @@ void Couleur::ajouterReflexion(const Couleur cr, const float reflx)
 void Couleur::ajouterAmbiance(Couleur c)
 {
 	Couleur nouvelle = *this + c; 
+
+	//255 est la valeur maximale pour une couleur rgb dans un .ppm
 	if (nouvelle.r > 255) r = 255;
 	else r = nouvelle.r;
 

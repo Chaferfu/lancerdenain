@@ -14,13 +14,26 @@ public:
 	void setR(const int r) {this->r = r;}
 	void setG(const int g) {this->g = g;}
 	void setB(const int b) {this->b = b;}
+
+	/*Set la couleur en utilisant la formule donnee dans le sujet*/
 	void calculerCouleur(const int e, const float angle, Couleur ci, Couleur cs);
+
+	/*set la couleur en prenant compte de la reflexion*/
 	void calculerCouleurReflexion(const int e, const float angle, const Couleur cr, const Couleur cs, const float reflx);
+
+	/*rajoute la composante reflechie dans la valeur de la couleur*/
 	void ajouterReflexion(const Couleur cr, const float reflx);
+
 	void reflexiondansleneant(Couleur c, float reflx);
+
+	/*affiche la couleur dans le stream*/
 	void afficher(std::ostream &flux) const;
+
+	/*teste l'egaite de 2 couleurs*/
 	bool estEgal(Couleur c);
 	void ajouterAmbiance(Couleur c);
+
+	//Pour les operations arithmetiques les couleurs se comportent comme des vecteurs
 
 
 	Couleur& operator+=(const Couleur& rhs) 
