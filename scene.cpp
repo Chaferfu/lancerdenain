@@ -251,7 +251,7 @@ void Scene::rayTracing(){
 					//reflexion speculaire
 					ref = rayonReflechi(r);
 					pcref = getIntersection(ref);
-					ecran.getPixels()[i][j].ajouterReflexion(reflexion(ref, 3), reflx);
+					ecran.getPixels()[i][j].ajouterReflexion(reflexion(ref, 5), reflx);
 
 					
 					/*

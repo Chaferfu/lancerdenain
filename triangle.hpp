@@ -1,6 +1,7 @@
 #ifndef TRIANGLE_H_INCLUDED
 #define TRIANGLE_H_INCLUDED
 #include "objet.hpp"
+#include "point.hpp"
 
 class Triangle: public Objet{
 private:

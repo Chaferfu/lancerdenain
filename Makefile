@@ -1,28 +1,21 @@
-EXEC = main
-SOURCES = couleur.cpp point.cpp sphere.cpp ecran.cpp scene.cpp rayon.cpp pointcolore.cpp 
-OBJECTS = $(SOURCES:.cpp=.o)
 CC = g++
-CFLAGS = -Wall -g -Wextra -std=c++11
+CFLAGS = -Wall -Wextra -g -std=c++11
+EXEC_NAME = lancer
+OBJ_FILES = couleur.o ecran.o objet.o point.o pointcolore.o rayon.o scene.o sphere.o triangle.o
 
-.PHONY: default clean
- 
-default: $(EXEC)
- 
-couleur.o: couleur.cpp couleur.hpp
-point.o: point.cpp point.hpp
-pointcolore.o: pointcolore.cpp pointcolore.hpp
-rayon.o : rayon.cpp rayon.hpp
-sphere.o: sphere.cpp sphere.hpp
-scene.o: scene.cpp scene.hpp
-ecran.o: ecran.cpp ecran.hpp
+all : $(EXEC_NAME)
 
+clean :
+	rm $(EXEC_NAME) $(OBJ_FILES)
 
+$(EXEC_NAME) : $(OBJ_FILES)
+	$(CC) -o $(EXEC_NAME) $(OBJ_FILES) $(LIBS)
 
 %.o: %.cpp
-	$(CC) $< $(CFLAGS) -o $@ -c 
- 
-$(EXEC): $(OBJECTS)
-	$(CC) -o $@ $^
- 
-clean:
-	rm -rf $(EXEC) $(OBJECTS) $(SOURCES:.cpp=.cpp~) $(SOURCES:.cpp=.hpp~) Makefile~
+	$(CC) $(CFLAGS) $(INCLUDES) -o $@ -c $<
+
+%.o: %.cc
+	$(CC) $(CFLAGS) $(INCLUDES) -o $@ -c $<
+
+%.o: %.c
+	gcc $(CFLAGS) $(INCLUDES) -o $@ -c $<
