@@ -231,7 +231,7 @@ void Scene::rayTracing(){
 	PointColore pc, pcref;
 	Rayon r, ref;
 	float reflx;
-
+	Couleur ambiance(240,240,240);
 	//#pragma omp parallel for
 	for(unsigned int i = 0; i < ecran.getResolutionVerticale(); i++){
 		for(unsigned int j = 0; j < ecran.getReso(); j++){
@@ -256,6 +256,9 @@ void Scene::rayTracing(){
 					pcref = getIntersection(ref);
 					ecran.getPixels()[i][j].ajouterReflexion(reflexion(ref, 5), reflx);
 
+
+
+					ecran.getPixels()[i][j].ajouterAmbiance(ambiance);
 					
 					/*
 					if(i==200 && j==150)

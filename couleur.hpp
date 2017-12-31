@@ -20,6 +20,8 @@ public:
 	void reflexiondansleneant(Couleur c, float reflx);
 	void afficher(std::ostream &flux) const;
 	bool estEgal(Couleur c);
+	void ajouterAmbiance(Couleur c);
+
 
 	Couleur& operator+=(const Couleur& rhs) 
 	{                           

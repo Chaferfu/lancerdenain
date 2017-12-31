@@ -35,6 +35,19 @@ void Couleur::ajouterReflexion(const Couleur cr, const float reflx)
 	b = (1 - reflx)*b + reflx*cr.getB();
 }
 
+void Couleur::ajouterAmbiance(Couleur c)
+{
+	Couleur nouvelle = *this + c; 
+	if (nouvelle.r > 255) r = 255;
+	else r = nouvelle.r;
+
+	if (nouvelle.g > 255) g = 255;
+	else g = nouvelle.g;
+
+	if (nouvelle.b > 255) b = 255;
+	else b = nouvelle.b;
+}
+
 void Couleur::reflexiondansleneant(Couleur c, float reflx)
 {
 	r = (1 - reflx)*r + reflx*c.getR();
