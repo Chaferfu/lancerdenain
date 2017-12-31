@@ -1,9 +1,19 @@
+#include <vector>
+#include <fstream>
+#include <iostream>
+#include <string.h>			 
+#include <sstream>
+#include "couleur.hpp"
+#include "point.hpp"
 #include "scene.hpp"
 using namespace std;
 
-Scene::Scene(){}
+Scene::Scene()
+{
+	
+}
 
-Scene::Scene(const Point c, const Ecran& e, const PointColore s, const Couleur coul, const vector<Sphere> v, const vector<Triangle> t){
+Scene::Scene(const Point c,const  Ecran& e,const PointColore s,const Couleur coul,const vector<Sphere> v, const vector<Triangle> t){
 	camera = c;
 	ecran = e;
 	source = s;
@@ -17,10 +27,12 @@ void Scene::addSphere(const Sphere s){
 }
 
 float Scene::calculerAngle(PointColore p){
+
 	Point vNormale = spheres.at(idCourant).getCentre() - p; //normale entrante ??
 	Point vRayon = source - p;
 
 	float produit = vNormale.scalaire(vRayon);
+
 
 	return acos(produit/(vNormale.norme()*vRayon.norme())) - M_PI;
 }
@@ -55,14 +67,13 @@ PointColore Scene::getIntersection(Rayon r){
 			if(sol1 > 0){
  				t = sol1;
  				coul = s.getCouleur();
- 			idCourant = i;
+ 				idCourant = i;
 			}
  			else if(sol2 > 0){
  				t = sol2;
  				coul = s.getCouleur();
- 			idCourant = i;
+ 				idCourant = i;
  			}
- 			
 		}
 
 		i++;
@@ -140,6 +151,8 @@ void Scene::ecrirePPM(){
 				fichier << ecran.getPixels()[i][j] << endl;
 		}
 
+		ecran.deleteE();
+
 		fichier.close();
 	} catch(exception const& e){
 		cerr << "Erreur : " << e.what() << endl;
@@ -154,9 +167,27 @@ void Scene::ecrirePPM(){
 bool Scene::estVisible(PointColore p){
 	int prec = idCourant;
 	PointColore p2 = getIntersection(Rayon(source, p));
+	cout << idCourant << endl;
 	if(idCourant == -1 || (((Point)p2).distance((Point)source) - ((Point)p).distance((Point)source) < 0.005f && idCourant == prec))
 		return true;
 	return false;
+}
+
+Couleur Scene::couleurVisible(PointColore pc)
+{
+
+}
+
+void Scene::reflexion(PointColore pcref, int i, int j, float reflx)
+{
+	if (pcref.estInfini())
+	{
+		ecran.getPixels()[i][j].reflexiondansleneant(background, reflx);
+	}
+	else
+	{
+		ecran.getPixels()[i][j].calculerCouleurReflexion(estVisible(pcref), calculerAngle(pcref), pcref.getCouleur(), source.getCouleur(), reflx);
+	}
 }
 
 void Scene::rayTracing(){
@@ -167,19 +198,56 @@ void Scene::rayTracing(){
 	//#pragma omp parallel for
 	for(unsigned int i = 0; i < ecran.getResolutionVerticale(); i++){
 		for(unsigned int j = 0; j < ecran.getReso(); j++){
+			//	cout << "pixel n " << i*ecran.getReso() + j <<endl;
 			r = Rayon(camera, ecran.getPixel(i*ecran.getReso()+j));
+			//	cout << r.getOrigine() << r.getDirection() <<endl;
 			pc = getIntersection(r);
+			//	cout << "intersection" << pc << endl;
 			if(idCourant != -1) // Si le rayon a touché un objet
 			{	
+				//cout << pc <<endl;
 				reflx = spheres.at(idCourant).getReflex();
 				ecran.getPixels()[i][j].calculerCouleur(estVisible(pc), calculerAngle(pc) , pc.getCouleur(), source.getCouleur());
 					
 				//reflexion speculaire
 				ref = rayonReflechi(r);
 				pcref = getIntersection(ref);
-				ecran.getPixels()[i][j].calculerCouleurReflexion(pcref.getCouleur(), reflx);
-			}
+				cout << "CASSE LES BOULES ********************************************************** pixel " << i << " " << j << endl;
+				reflexion(pcref, i, j, reflx);
+					
+					/*
+					if(i==200 && j==150)
+					{
 
+						cout << "pixel " << i << " " << j << endl; 
+						cout << "rayon incident" << r.getOrigine() << r.getDirection() << endl;
+						cout << "BOULE TOUCHEE : " << idCourant << endl;
+						cout << "rayon reflechi : " << ref.getOrigine() << ref.getDirection() << endl;
+						cout << "point reflechi : " << pcref << pcref.getCouleur() << endl;
+						pc = getIntersection(r);
+						cout << "OK CA DEBUG \nintersection" << pc << endl;
+						cout << "idCourant" << idCourant << endl;
+						cout << "centre de la boule : " << spheres.at(idCourant).getCentre() << endl;
+						Point normale = spheres.at(idCourant).normale(pc);
+						cout << "normale" << normale << normale << endl;
+						cout << "incident " << r.getDirection() << endl;
+						Point directionUnitaireIncident = r.getDirection()/r.getDirection().norme();
+ 						cout << "normalisé " << directionUnitaireIncident << endl;
+						//cout << "incident : " << directionUnitaireIncident << "normale " << normale.getDirection() << endl;
+
+						Point directionReflechi = directionUnitaireIncident - 2*(directionUnitaireIncident.scalaire(normale))*normale;
+
+						cout << "reflechi " << directionReflechi << endl;
+
+						Rayon reflechi(pc + 1.f*directionReflechi, directionReflechi);
+
+
+						//cout << "to return ::::: "  << intersection << " dir :" << directionReflechi << endl;
+						cout << "rayon reflechi " << reflechi.getOrigine() << reflechi.getDirection() << endl;
+
+					}*/
+
+			}
 			else
 				ecran.getPixels()[i][j] = background;
 		}
@@ -195,8 +263,8 @@ Scene parse(char* input){
 
 	//creation camera
 
-	float x, y, z, radius, reflx;
-	int res, r, g, b;
+	float x = 0, y = 0, z = 0, radius = 0, reflx = 0;
+	int res = 0, r = 0, g = 0, b = 0;
 
 	getline(stream, str);
 	istringstream iss(str);
@@ -315,6 +383,7 @@ Scene parse(char* input){
 	//TODO fermer le fichier : en fait c'est bon RAII
 	stream.close(); //pas sur que ça soit necessaire ( ça se fait dans le destructeur du stream normalement)
 	return Scene(cam, e, s, bg, v, triangles);
+
 }
 
 void testParsing(char* input)
@@ -383,15 +452,14 @@ void testOpPoints()
 
 int main(int argc, char* argv[])
 {
-	if (argc == 0) cout << "il faut mettre le fichier d'entree en argument" << endl;
-
-	Scene s = parse(argv[1]);
-	
-	s.rayTracing();
-
-	//cout << s.getIntersection(Rayon(Point(1,1,1), Point(-1.2, 1.72, 2.25))) << endl;
-
-	s.ecrirePPM();
+	if (argc > 1){
+		Scene s = parse(argv[1]);
+		s.rayTracing();
+		//cout << s.getIntersection(Rayon(Point(1,1,1), Point(-1.2, 1.72, 2.25))) << endl;
+		s.ecrirePPM();
+	} 
+	else
+		cerr << "il faut mettre le fichier d'entree en argument" << endl;
 
 	return 0;
 }

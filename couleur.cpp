@@ -21,11 +21,18 @@ void Couleur::calculerCouleur(const int e, const float angle, Couleur ci, Couleu
 	b = e*cos(angle)*(ci.getB()*cs.getB())/255;
 }
 
-void Couleur::calculerCouleurReflexion(const Couleur cr, const float reflx)
+void Couleur::calculerCouleurReflexion(const int e, const float angle,const Couleur cr,const Couleur cs, const float reflx)
 {
-	r = (1 - reflx)*r + reflx*cr.getR();
-	g = (1 - reflx)*g + reflx*cr.getG();
-	b = (1 - reflx)*b + reflx*cr.getB();
+	r = (1 - reflx)*r + reflx*e*cos(angle)*(cr.getR()*cs.getR())/255;
+	g = (1 - reflx)*g + reflx*e*cos(angle)*(cr.getG()*cs.getG())/255;
+	b = (1 - reflx)*b + reflx*e*cos(angle)*(cr.getB()*cs.getB())/255;
+}
+
+void Couleur::reflexiondansleneant(Couleur c, float reflx)
+{
+	r = (1 - reflx)*r + reflx*c.getR();
+	g = (1 - reflx)*g + reflx*c.getG();
+	b = (1 - reflx)*b + reflx*c.getB();
 }
 
 void Couleur::afficher(std::ostream &flux) const{

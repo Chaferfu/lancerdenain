@@ -18,6 +18,11 @@ void Point::afficher(std::ostream &flux) const
     flux << "Point:  " << "x :"<< x << "  y:" << y << "  z:" << z  << std::endl;
 }
 
+bool Point::estInfini() const
+{
+	return (isinf(x) || isinf(y) || isinf(z));
+}
+
 float Point::distance(const Point other) const
 {
 	float xx, yy, zz;

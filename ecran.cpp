@@ -30,9 +30,9 @@ Ecran::Ecran(const int res, const Point tl, const Point tr, const Point bl){
 
 }
 
-Ecran::~Ecran()
+void Ecran::deleteE()
 {
-	/*
+	
 	cout << "reso h " << resolution << "  reso v " << resolutionVerticale << endl;
 	
 	for(unsigned int i = 0; i < resolutionVerticale; ++i)
@@ -42,7 +42,7 @@ Ecran::~Ecran()
 	} 
 	cout << "je delete le dernier" << endl;
 	delete[] pixels;
-	*/
+	
 	
 }
 

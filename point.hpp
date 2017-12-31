@@ -18,6 +18,7 @@ public:
 	void afficher(std::ostream &flux) const;	
 	float distance(const Point other) const;
 	float scalaire(const Point other);
+	bool estInfini() const;
 	float norme();
 
 

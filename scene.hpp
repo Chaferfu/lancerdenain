@@ -45,6 +45,10 @@ public:
 	PointColore getIntersection(Rayon r);
 	void rayTracing();
 	Rayon rayonReflechi(const Rayon incident);
+	void reflexion(PointColore pcref, int i, int j, float reflx);
+	Couleur couleurVisible(PointColore pc);
+
+
 };
 
 Scene parse(char* input);
